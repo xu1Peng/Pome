@@ -31,30 +31,10 @@ class ProfileViewController: UIViewController {
         return table
     }()
     
-    // 修改图片容器视图
-    private let imageContainerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .systemGray6
-        view.layer.cornerRadius = 12
-        view.clipsToBounds = true
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFit
-        imageView.clipsToBounds = true
-        imageView.image = UIImage(systemName: "photo")
-        imageView.tintColor = .systemGray3
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
-    
     // MARK: - Properties
     private let menuItems = [
         ["我的收藏"],
-        ["版本号"]
+        ["版本号", "用户协议"]
     ]
     
     // MARK: - Lifecycle
@@ -88,8 +68,6 @@ class ProfileViewController: UIViewController {
         view.addSubview(avatarImageView)
         view.addSubview(usernameLabel)
         view.addSubview(tableView)
-        view.addSubview(imageContainerView)
-        imageContainerView.addSubview(imageView)
         
         // 设置代理
         tableView.delegate = self
@@ -113,19 +91,7 @@ class ProfileViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 20),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            // 图片容器约束
-            imageContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
-            imageContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
-            imageContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
-            imageContainerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40),
-            
-            // 图片视图约束
-            imageView.topAnchor.constraint(equalTo: imageContainerView.topAnchor),
-            imageView.leadingAnchor.constraint(equalTo: imageContainerView.leadingAnchor),
-            imageView.trailingAnchor.constraint(equalTo: imageContainerView.trailingAnchor),
-            imageView.bottomAnchor.constraint(equalTo: imageContainerView.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     
@@ -136,11 +102,6 @@ class ProfileViewController: UIViewController {
     
     @objc private func editProfile() {
         // 处理编辑个人资料逻辑
-    }
-    
-    // 添加设置图片的方法
-    func setImage(_ image: UIImage?) {
-        imageView.image = image
     }
 }
 
@@ -161,10 +122,16 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         cell.textLabel?.text = item
         
         if indexPath.section == 1 && indexPath.row == 0 {
+            // 版本号
             cell.detailTextLabel?.text = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0.0"
         }
         
-        cell.accessoryType = indexPath.section == 0 ? .disclosureIndicator : .none
+        // 设置适当的附件类型
+        if (indexPath.section == 0 && indexPath.row == 0) || (indexPath.section == 1 && indexPath.row == 1) {
+            cell.accessoryType = .disclosureIndicator
+        } else {
+            cell.accessoryType = .none
+        }
         
         return cell
     }
@@ -174,6 +141,10 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         
         if indexPath.section == 0 && indexPath.row == 0 {
             // 处理我的收藏点击事件
+            print("点击了我的收藏")
+        } else if indexPath.section == 1 && indexPath.row == 1 {
+            // 处理用户协议点击事件
+            print("点击了用户协议")
         }
     }
 } 
