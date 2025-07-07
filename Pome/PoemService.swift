@@ -9,6 +9,9 @@ class PoemService: ObservableObject {
     // 更换为一个更稳定的免费API接口
     private let poemDataURL = "https://hub.saintic.com/openservice/sentence/all.json"
     // private let poemDataURL = "https://v1.jinrishici.com/all.json"
+    // https://v1.jinrishici.com/all.svg
+    // https://v1.jinrishici.com/shuqing/libie.png
+    // https://v1.jinrishici.com/rensheng.txt
 
     private let localPoemFilename = "localPoems.json"
     private let networkMonitor = NWPathMonitor()
