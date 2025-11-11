@@ -19,16 +19,16 @@ class ImageViewController: UIViewController {
     // MARK: - UI Components
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 10
-        layout.minimumInteritemSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        
+        layout.minimumLineSpacing = 12
+        layout.minimumInteritemSpacing = 12
+        layout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+
         // 计算每行显示2个图片的大小
-        let width = (UIScreen.main.bounds.width - 30) / 2
+        let width = (UIScreen.main.bounds.width - 44) / 2
         layout.itemSize = CGSize(width: width, height: width)
-        
+
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .systemBackground
+        collectionView.backgroundColor = UIColor(red: 0.98, green: 0.98, blue: 0.99, alpha: 1.0)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(ImageCell.self, forCellWithReuseIdentifier: "ImageCell")
         return collectionView
@@ -131,51 +131,58 @@ class ImageCell: UICollectionViewCell {
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
-        imageView.tintColor = .systemBlue
+        imageView.tintColor = UIColor(red: 0.4, green: 0.5, blue: 0.8, alpha: 1.0)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-    
+
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 14)
+        label.font = .systemFont(ofSize: 14, weight: .medium)
+        label.textColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private func setupUI() {
-        backgroundColor = .systemGray6
-        layer.cornerRadius = 8
-        clipsToBounds = true
-        
+        backgroundColor = .white
+        layer.cornerRadius = 12
+        layer.masksToBounds = true
+
+        // 添加阴影
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.1
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowRadius = 4
+
         contentView.addSubview(imageView)
         contentView.addSubview(titleLabel)
-        
+
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12),
+            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor),
-            
+
             titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
             titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
         ])
     }
-    
+
     func configure(title: String, image: UIImage?) {
         titleLabel.text = title
         imageView.image = image
     }
-} 
+}

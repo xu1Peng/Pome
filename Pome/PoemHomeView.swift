@@ -7,22 +7,17 @@ struct PoemHomeView: View {
     @State private var isShowingSearch = false
     @State private var isShowingErrorAlert = false
     let title: String
-    
+
     init(title: String = "诗歌") {
         self.title = title
     }
-    
+
     var body: some View {
         ZStack {
-            // 背景色
-            Color(UIColor(
-                red: .random(in: 0.6...0.9),
-                green: .random(in: 0.6...0.9),
-                blue: .random(in: 0.6...0.9),
-                alpha: 1.0
-            )).ignoresSafeArea()
-            
-            VStack {
+            // 统一背景色
+            AppTheme.backgroundColor.ignoresSafeArea()
+
+            VStack(spacing: 0) {
                 if poemService.isLoading {
                     // 加载中状态
                     LoadingView()
@@ -39,90 +34,68 @@ struct PoemHomeView: View {
                 } else {
                     // 显示诗词内容
                     ScrollView {
-                        VStack {
+                        VStack(spacing: AppTheme.spacing_lg) {
                             // 随机展示一首诗
                             PoemCardView(poem: selectedPoem ?? poemService.getRandomPoem())
-                                .padding()
-                            
+                                .padding(.horizontal, AppTheme.spacing_lg)
+
                             // 操作按钮区域
-                            HStack {
-                                // 刷新按钮
+                            HStack(spacing: AppTheme.spacing_md) {
+                                // 换一首按钮
                                 Button(action: {
                                     withAnimation {
                                         selectedPoem = poemService.getRandomPoem()
                                     }
                                 }) {
-                                    Label("换一首", systemImage: "arrow.triangle.2.circlepath")
-                                        .foregroundColor(.white)
-                                        .padding()
-                                        .background(Color.blue)
-                                        .cornerRadius(8)
+                                    HStack {
+                                        Image(systemName: "arrow.triangle.2.circlepath")
+                                        Text("换一首")
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .foregroundColor(.white)
+                                    .padding(AppTheme.spacing_md)
+                                    .background(AppTheme.primaryColor)
+                                    .cornerRadius(AppTheme.cornerRadius_md)
                                 }
-                                
-                                // 强制从网络刷新按钮
+
+                                // 刷新数据按钮
                                 Button(action: {
                                     poemService.forceRefresh()
                                 }) {
-                                    Label("刷新数据", systemImage: "arrow.clockwise")
-                                        .foregroundColor(.white)
-                                        .padding()
-                                        .background(Color.green)
-                                        .cornerRadius(8)
+                                    HStack {
+                                        Image(systemName: "arrow.clockwise")
+                                        Text("刷新")
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .foregroundColor(.white)
+                                    .padding(AppTheme.spacing_md)
+                                    .background(AppTheme.secondaryColor)
+                                    .cornerRadius(AppTheme.cornerRadius_md)
                                 }
                             }
-                            .padding(.bottom)
-                            
+                            .padding(.horizontal, AppTheme.spacing_lg)
+
                             // 热门诗人
-                            VStack(alignment: .leading) {
-                                Text("热门诗人")
-                                    .font(.headline)
-                                    .padding(.leading)
-                                
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack(spacing: 15) {
-                                        ForEach(["李白", "杜甫", "白居易", "王维", "苏轼"], id: \.self) { author in
-                                            Button(action: {
-                                                let poems = poemService.getPoemsByAuthor(author: author)
-                                                selectedPoem = poems.first ?? poemService.getRandomPoem()
-                                            }) {
-                                                Text(author)
-                                                    .foregroundColor(.white)
-                                                    .padding(.vertical, 8)
-                                                    .padding(.horizontal, 15)
-                                                    .background(Color.blue.opacity(0.7))
-                                                    .cornerRadius(20)
-                                            }
-                                        }
-                                    }
-                                    .padding()
+                            CategorySection(
+                                title: "热门诗人",
+                                items: ["李白", "杜甫", "白居易", "王维", "苏轼"],
+                                onSelect: { author in
+                                    let poems = poemService.getPoemsByAuthor(author: author)
+                                    selectedPoem = poems.first ?? poemService.getRandomPoem()
                                 }
-                            }
-                            
+                            )
+
                             // 朝代分类
-                            VStack(alignment: .leading) {
-                                Text("按朝代分类")
-                                    .font(.headline)
-                                    .padding(.leading)
-                                
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack(spacing: 15) {
-                                        ForEach(["唐代", "宋代", "元代", "明代", "清代"], id: \.self) { dynasty in
-                                            Button(action: {
-                                                let poems = poemService.getPoemsByDynasty(dynasty: dynasty)
-                                                selectedPoem = poems.first ?? poemService.getRandomPoem()
-                                            }) {
-                                                Text(dynasty)
-                                                    .foregroundColor(.white)
-                                                    .padding(.vertical, 8)
-                                                    .padding(.horizontal, 15)
-                                                    .background(Color.green.opacity(0.7))
-                                                    .cornerRadius(20)
-                                            }
-                                        }
-                                    }
-                                    .padding()
+                            CategorySection(
+                                title: "按朝代分类",
+                                items: ["唐代", "宋代", "元代", "明代", "清代"],
+                                onSelect: { dynasty in
+                                    let poems = poemService.getPoemsByDynasty(dynasty: dynasty)
+                                    selectedPoem = poems.first ?? poemService.getRandomPoem()
                                 }
-                            }
+                            )
+
+                            Spacer().frame(height: AppTheme.spacing_lg)
                         }
                     }
                 }
@@ -139,16 +112,12 @@ struct PoemHomeView: View {
             }
         }
         .onAppear {
-            // 如果没有选择诗词，就随机选一首
             if selectedPoem == nil && !poemService.poems.isEmpty {
                 selectedPoem = poemService.getRandomPoem()
             }
-            
-            // 设置通知监听器
             setupNotifications()
         }
         .onDisappear {
-            // 移除通知监听器
             NotificationCenter.default.removeObserver(self)
         }
         .sheet(isPresented: $isShowingSearch) {
@@ -196,18 +165,22 @@ struct PoemHomeView: View {
 // 加载视图
 struct LoadingView: View {
     var body: some View {
-        VStack(spacing: 20) {
-            ProgressView("正在加载诗词...")
+        VStack(spacing: AppTheme.spacing_lg) {
+            ProgressView()
                 .progressViewStyle(CircularProgressViewStyle())
-                .foregroundColor(.white)
-            
+                .tint(AppTheme.primaryColor)
+
+            Text("正在加载诗词...")
+                .font(.headline)
+                .foregroundColor(AppTheme.textPrimary)
+
             Text("正在从网络获取最新诗词数据")
-                .foregroundColor(.white)
+                .font(.subheadline)
+                .foregroundColor(AppTheme.textSecondary)
                 .multilineTextAlignment(.center)
         }
-        .padding()
-        .background(Color.black.opacity(0.2))
-        .cornerRadius(10)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(AppTheme.backgroundColor)
     }
 }
 
@@ -215,124 +188,180 @@ struct LoadingView: View {
 struct ErrorView: View {
     let errorMessage: String
     let retryAction: () -> Void
-    
+
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: AppTheme.spacing_lg) {
             Image(systemName: "exclamationmark.triangle")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 60, height: 60)
-                .foregroundColor(.red)
-            
+                .foregroundColor(AppTheme.accentColor)
+
             Text("加载失败")
-                .font(.title)
+                .font(.title2)
                 .fontWeight(.bold)
-                .foregroundColor(.red)
-            
+                .foregroundColor(AppTheme.textPrimary)
+
             Text(errorMessage)
+                .font(.body)
+                .foregroundColor(AppTheme.textSecondary)
                 .multilineTextAlignment(.center)
-                .padding()
-            
-            Button(action: retryAction) {
-                Text("重试")
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                    .padding()
-                    .frame(width: 160)
-                    .background(Color.blue)
-                    .cornerRadius(8)
+                .padding(.horizontal)
+
+            VStack(spacing: AppTheme.spacing_md) {
+                Button(action: retryAction) {
+                    Text("重试")
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(AppTheme.spacing_md)
+                        .background(AppTheme.primaryColor)
+                        .cornerRadius(AppTheme.cornerRadius_md)
+                }
+
+                Button(action: {
+                    NotificationCenter.default.post(name: NSNotification.Name("LoadLocalPoems"), object: nil)
+                }) {
+                    Text("使用离线数据")
+                        .fontWeight(.medium)
+                        .foregroundColor(AppTheme.primaryColor)
+                        .frame(maxWidth: .infinity)
+                        .padding(AppTheme.spacing_md)
+                        .background(AppTheme.backgroundColor)
+                        .cornerRadius(AppTheme.cornerRadius_md)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: AppTheme.cornerRadius_md)
+                                .stroke(AppTheme.primaryColor, lineWidth: 1)
+                        )
+                }
             }
-            
-            Button(action: {
-                // 不再尝试直接访问PoemService实例
-                // 而是通过传入的重试操作通知外层组件重新加载本地数据
-                NotificationCenter.default.post(name: NSNotification.Name("LoadLocalPoems"), object: nil)
-            }) {
-                Text("使用离线数据")
-                    .fontWeight(.medium)
-                    .foregroundColor(.blue)
-            }
-            .padding()
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(12)
-        .shadow(radius: 5)
-        .padding()
+        .padding(AppTheme.spacing_lg)
+        .background(AppTheme.cardBackground)
+        .cornerRadius(AppTheme.cornerRadius_lg)
+        .shadow(color: AppTheme.shadowColor, radius: AppTheme.shadowRadius, x: 0, y: 2)
+        .padding(AppTheme.spacing_lg)
     }
 }
 
 // 空数据视图
 struct EmptyDataView: View {
     let loadAction: () -> Void
-    
+
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: AppTheme.spacing_lg) {
             Image(systemName: "doc.text")
                 .resizable()
                 .scaledToFit()
                 .frame(width: 60, height: 60)
-                .foregroundColor(.gray)
-            
+                .foregroundColor(AppTheme.textSecondary)
+
             Text("还没有诗词数据")
                 .font(.title2)
-                .fontWeight(.medium)
-            
+                .fontWeight(.semibold)
+                .foregroundColor(AppTheme.textPrimary)
+
+            Text("点击下方按钮获取诗词数据")
+                .font(.subheadline)
+                .foregroundColor(AppTheme.textSecondary)
+
             Button(action: loadAction) {
                 Text("获取诗词")
-                    .fontWeight(.bold)
+                    .fontWeight(.semibold)
                     .foregroundColor(.white)
-                    .padding()
-                    .frame(width: 160)
-                    .background(Color.blue)
-                    .cornerRadius(8)
+                    .frame(maxWidth: .infinity)
+                    .padding(AppTheme.spacing_md)
+                    .background(AppTheme.primaryColor)
+                    .cornerRadius(AppTheme.cornerRadius_md)
             }
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(12)
-        .shadow(radius: 5)
-        .padding()
+        .padding(AppTheme.spacing_lg)
+        .background(AppTheme.cardBackground)
+        .cornerRadius(AppTheme.cornerRadius_lg)
+        .shadow(color: AppTheme.shadowColor, radius: AppTheme.shadowRadius, x: 0, y: 2)
+        .padding(AppTheme.spacing_lg)
     }
 }
 
-// 简洁版诗词卡片视图
+// 诗词卡片视图
 struct PoemCardView: View {
     let poem: Poem
-    
+
     var body: some View {
         NavigationLink(destination: PoemView(poem: poem)) {
-            VStack(alignment: .center, spacing: 12) {
+            VStack(alignment: .center, spacing: AppTheme.spacing_md) {
                 Text(poem.title)
-                    .font(.title)
+                    .font(.title2)
                     .fontWeight(.bold)
-                
-                HStack {
+                    .foregroundColor(AppTheme.textPrimary)
+
+                HStack(spacing: AppTheme.spacing_sm) {
                     Text("[\(poem.dynasty)]")
                         .font(.subheadline)
                     Text(poem.writer)
                         .font(.subheadline)
                 }
-                .foregroundColor(.secondary)
-                
+                .foregroundColor(AppTheme.textSecondary)
+
+                Divider()
+                    .padding(.vertical, AppTheme.spacing_sm)
+
                 let firstTwoLines = poem.content.split(separator: "\n").prefix(2)
                 ForEach(firstTwoLines.indices, id: \.self) { index in
                     Text(String(firstTwoLines[index]))
                         .font(.body)
+                        .foregroundColor(AppTheme.textPrimary)
                         .multilineTextAlignment(.center)
+                        .lineLimit(2)
                 }
-                
+
                 if poem.content.split(separator: "\n").count > 2 {
                     Text("...")
                         .font(.body)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(AppTheme.textSecondary)
                 }
             }
-            .padding()
+            .padding(AppTheme.spacing_lg)
             .frame(maxWidth: .infinity)
-            .background(Color.white)
-            .cornerRadius(12)
-            .shadow(radius: 5)
+            .background(AppTheme.cardBackground)
+            .cornerRadius(AppTheme.cornerRadius_lg)
+            .shadow(color: AppTheme.shadowColor, radius: AppTheme.shadowRadius, x: 0, y: 2)
+        }
+    }
+}
+
+// 分类区域组件
+struct CategorySection: View {
+    let title: String
+    let items: [String]
+    let onSelect: (String) -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: AppTheme.spacing_md) {
+            Text(title)
+                .font(.headline)
+                .foregroundColor(AppTheme.textPrimary)
+                .padding(.horizontal, AppTheme.spacing_lg)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: AppTheme.spacing_md) {
+                    ForEach(items, id: \.self) { item in
+                        Button(action: {
+                            onSelect(item)
+                        }) {
+                            Text(item)
+                                .font(.subheadline)
+                                .fontWeight(.medium)
+                                .foregroundColor(.white)
+                                .padding(.vertical, AppTheme.spacing_sm)
+                                .padding(.horizontal, AppTheme.spacing_md)
+                                .background(AppTheme.primaryColor)
+                                .cornerRadius(AppTheme.cornerRadius_md)
+                        }
+                    }
+                }
+                .padding(.horizontal, AppTheme.spacing_lg)
+            }
         }
     }
 }
@@ -343,7 +372,7 @@ struct SearchView: View {
     @ObservedObject var poemService: PoemService
     @State private var searchText = ""
     let onSelect: (Poem) -> Void
-    
+
     var filteredPoems: [Poem] {
         if searchText.isEmpty {
             return []
@@ -351,65 +380,72 @@ struct SearchView: View {
             let titleResults = poemService.getPoemsByTitle(keyword: searchText)
             let contentResults = poemService.getPoemsByContent(keyword: searchText)
             let authorResults = poemService.getPoemsByAuthor(author: searchText)
-            
-            // 合并结果并去重
+
             var combinedResults = Array(Set(titleResults + contentResults + authorResults))
-            // 限制结果数量
             if combinedResults.count > 20 {
                 combinedResults = Array(combinedResults.prefix(20))
             }
             return combinedResults
         }
     }
-    
+
     var body: some View {
         NavigationView {
-            VStack {
+            VStack(spacing: 0) {
                 // 搜索框
-                TextField("输入关键词搜索", text: $searchText)
-                    .padding()
-                    .background(Color(.systemGray6))
-                    .cornerRadius(8)
-                    .padding(.horizontal)
-                
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(AppTheme.textSecondary)
+
+                    TextField("输入关键词搜索", text: $searchText)
+                        .foregroundColor(AppTheme.textPrimary)
+                }
+                .padding(AppTheme.spacing_md)
+                .background(AppTheme.backgroundColor)
+                .cornerRadius(AppTheme.cornerRadius_md)
+                .padding(AppTheme.spacing_lg)
+
                 if searchText.isEmpty {
-                    // 搜索提示
-                    VStack {
+                    VStack(spacing: AppTheme.spacing_md) {
                         Spacer()
+                        Image(systemName: "magnifyingglass")
+                            .font(.system(size: 40))
+                            .foregroundColor(AppTheme.textSecondary)
                         Text("请输入作者、标题或内容关键词")
-                            .foregroundColor(.gray)
+                            .foregroundColor(AppTheme.textSecondary)
                         Spacer()
                     }
                 } else if filteredPoems.isEmpty {
-                    // 没有搜索结果
-                    VStack {
+                    VStack(spacing: AppTheme.spacing_md) {
                         Spacer()
+                        Image(systemName: "doc.text.magnifyingglass")
+                            .font(.system(size: 40))
+                            .foregroundColor(AppTheme.textSecondary)
                         Text("没有找到匹配的诗词")
-                            .foregroundColor(.gray)
+                            .foregroundColor(AppTheme.textSecondary)
                         Spacer()
                     }
                 } else {
-                    // 搜索结果列表
                     List(filteredPoems, id: \.id) { poem in
                         Button(action: {
                             onSelect(poem)
                         }) {
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    Text(poem.title)
-                                        .font(.headline)
-                                    Text("[\(poem.dynasty)] \(poem.writer)")
-                                        .font(.subheadline)
-                                        .foregroundColor(.gray)
-                                }
-                                Spacer()
+                            VStack(alignment: .leading, spacing: AppTheme.spacing_sm) {
+                                Text(poem.title)
+                                    .font(.headline)
+                                    .foregroundColor(AppTheme.textPrimary)
+                                Text("[\(poem.dynasty)] \(poem.writer)")
+                                    .font(.subheadline)
+                                    .foregroundColor(AppTheme.textSecondary)
                             }
-                            .padding(.vertical, 5)
+                            .padding(.vertical, AppTheme.spacing_sm)
                         }
                         .buttonStyle(PlainButtonStyle())
                     }
+                    .listStyle(PlainListStyle())
                 }
             }
+            .background(AppTheme.backgroundColor)
             .navigationBarTitle("搜索诗词", displayMode: .inline)
             .navigationBarItems(trailing: Button("关闭") {
                 presentationMode.wrappedValue.dismiss()

@@ -1,150 +1,223 @@
 import UIKit
 
 class ProfileViewController: UIViewController {
-    
+
     // MARK: - UI Components
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
+
+    private let contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
     private let avatarImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.backgroundColor = .systemGray5
-        imageView.layer.cornerRadius = 40
+        imageView.backgroundColor = UIColor(red: 0.4, green: 0.5, blue: 0.8, alpha: 1.0)
+        imageView.layer.cornerRadius = 50
         imageView.image = UIImage(systemName: "person.circle.fill")
-        imageView.tintColor = .systemGray2
+        imageView.tintColor = .white
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-    
+
     private let usernameLabel: UILabel = {
         let label = UILabel()
-        label.text = "用户名"
-        label.font = .systemFont(ofSize: 20, weight: .medium)
+        label.text = "山间明月"
+        label.font = .systemFont(ofSize: 22, weight: .semibold)
         label.textAlignment = .center
+        label.textColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
+
+    private let descriptionLabel: UILabel = {
+        let label = UILabel()
+        label.text = "诗词爱好者"
+        label.font = .systemFont(ofSize: 14, weight: .regular)
+        label.textAlignment = .center
+        label.textColor = UIColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 1.0)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
     private let tableView: UITableView = {
-        let table = UITableView(frame: .zero, style: .insetGrouped)
+        let table = UITableView(frame: .zero, style: .plain)
         table.translatesAutoresizingMaskIntoConstraints = false
-        table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        table.register(ProfileMenuCell.self, forCellReuseIdentifier: "cell")
+        table.separatorStyle = .none
+        table.backgroundColor = .clear
+        table.isScrollEnabled = false
         return table
     }()
-    
+
     // MARK: - Properties
     private let menuItems = [
-        ["我的收藏"],
-        ["版本号", "用户协议"]
+        ("我的收藏", "heart.fill"),
+        ("编辑资料", "square.and.pencil"),
+        ("设置", "gearshape"),
+        ("关于我们", "info.circle"),
+        ("用户协议", "doc.text")
     ]
-    
+
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // 设置导航栏
+
         navigationItem.title = "个人中心"
-        
-        // 右侧按钮组
-        let settingsButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"),
-                                           style: .plain,
-                                           target: self,
-                                           action: #selector(openSettings))
-        
-        let editButton = UIBarButtonItem(image: UIImage(systemName: "square.and.pencil"),
-                                       style: .plain,
-                                       target: self,
-                                       action: #selector(editProfile))
-        
-        navigationItem.rightBarButtonItems = [settingsButton, editButton]
-        
         setupUI()
     }
-    
+
     // MARK: - UI Setup
     private func setupUI() {
-        view.backgroundColor = .systemGroupedBackground
-        
+        view.backgroundColor = UIColor(red: 0.98, green: 0.98, blue: 0.99, alpha: 1.0)
+
         // 添加子视图
-        view.addSubview(avatarImageView)
-        view.addSubview(usernameLabel)
-        view.addSubview(tableView)
-        
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubview(avatarImageView)
+        contentView.addSubview(usernameLabel)
+        contentView.addSubview(descriptionLabel)
+        contentView.addSubview(tableView)
+
         // 设置代理
         tableView.delegate = self
         tableView.dataSource = self
-        
+
         // 设置约束
         NSLayoutConstraint.activate([
+            // ScrollView 约束
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            // ContentView 约束
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+
             // 头像约束
-            avatarImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            avatarImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            avatarImageView.widthAnchor.constraint(equalToConstant: 80),
-            avatarImageView.heightAnchor.constraint(equalToConstant: 80),
-            
+            avatarImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
+            avatarImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            avatarImageView.widthAnchor.constraint(equalToConstant: 100),
+            avatarImageView.heightAnchor.constraint(equalToConstant: 100),
+
             // 用户名约束
-            usernameLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 12),
-            usernameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            usernameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            usernameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            
+            usernameLabel.topAnchor.constraint(equalTo: avatarImageView.bottomAnchor, constant: 16),
+            usernameLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            usernameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            usernameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+
+            // 描述约束
+            descriptionLabel.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 8),
+            descriptionLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+
             // 列表约束
-            tableView.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 20),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            tableView.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 24),
+            tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            tableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -24),
+            tableView.heightAnchor.constraint(equalToConstant: CGFloat(menuItems.count * 56))
         ])
-    }
-    
-    // MARK: - Actions
-    @objc private func openSettings() {
-        // 处理打开设置的逻辑
-    }
-    
-    @objc private func editProfile() {
-        // 处理编辑个人资料逻辑
     }
 }
 
 // MARK: - UITableViewDelegate & UITableViewDataSource
 extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
-    func numberOfSections(in tableView: UITableView) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return menuItems.count
     }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return menuItems[section].count
-    }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .value1, reuseIdentifier: "cell")
-        let item = menuItems[indexPath.section][indexPath.row]
-        
-        cell.textLabel?.text = item
-        
-        if indexPath.section == 1 && indexPath.row == 0 {
-            // 版本号
-            cell.detailTextLabel?.text = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0.0"
-        }
-        
-        // 设置适当的附件类型
-        if (indexPath.section == 0 && indexPath.row == 0) || (indexPath.section == 1 && indexPath.row == 1) {
-            cell.accessoryType = .disclosureIndicator
-        } else {
-            cell.accessoryType = .none
-        }
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ProfileMenuCell
+        let (title, icon) = menuItems[indexPath.row]
+        cell.configure(title: title, icon: icon)
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        if indexPath.section == 0 && indexPath.row == 0 {
-            // 处理我的收藏点击事件
-            print("点击了我的收藏")
-        } else if indexPath.section == 1 && indexPath.row == 1 {
-            // 处理用户协议点击事件
-            print("点击了用户协议")
-        }
+        let (title, _) = menuItems[indexPath.row]
+        print("点击了: \(title)")
     }
-} 
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 56
+    }
+}
+
+// MARK: - ProfileMenuCell
+class ProfileMenuCell: UITableViewCell {
+    private let iconImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = UIColor(red: 0.4, green: 0.5, blue: 0.8, alpha: 1.0)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 16, weight: .medium)
+        label.textColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
+    private let arrowImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "chevron.right")
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0)
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupUI()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private func setupUI() {
+        backgroundColor = .white
+        layer.cornerRadius = 12
+        layer.masksToBounds = true
+
+        contentView.addSubview(iconImageView)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(arrowImageView)
+
+        NSLayoutConstraint.activate([
+            iconImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            iconImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            iconImageView.widthAnchor.constraint(equalToConstant: 24),
+            iconImageView.heightAnchor.constraint(equalToConstant: 24),
+
+            titleLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 12),
+            titleLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+
+            arrowImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            arrowImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            arrowImageView.widthAnchor.constraint(equalToConstant: 16),
+            arrowImageView.heightAnchor.constraint(equalToConstant: 16)
+        ])
+    }
+
+    func configure(title: String, icon: String) {
+        titleLabel.text = title
+        iconImageView.image = UIImage(systemName: icon)
+    }
+}

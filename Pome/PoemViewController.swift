@@ -2,46 +2,32 @@ import UIKit
 import SwiftUI
 
 class PoemViewController: UIViewController {
-    
-    private var poemHomeView: UIHostingController<PoemHomeView>?
-    
+
+    private var homeView: UIHostingController<HomeView>?
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         // 设置导航栏
-        navigationItem.title = "诗歌"
-        
-        // 左侧按钮
-        let searchButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), 
-                                         style: .plain,
-                                         target: self,
-                                         action: #selector(searchPoems))
-        navigationItem.leftBarButtonItem = searchButton
-        
-        // 右侧按钮
-        let refreshButton = UIBarButtonItem(image: UIImage(systemName: "arrow.triangle.2.circlepath"),
-                                      style: .plain,
-                                      target: self,
-                                      action: #selector(refreshPoem))
-        navigationItem.rightBarButtonItem = refreshButton
-        
+        navigationItem.title = "首页"
+
         // 嵌入 SwiftUI 视图
-        embedPoemHomeView()
+        embedHomeView()
     }
-    
-    private func embedPoemHomeView() {
+
+    private func embedHomeView() {
         // 创建 SwiftUI 视图
-        let poemHomeView = PoemHomeView(title: "诗歌")
-        let hostingController = UIHostingController(rootView: poemHomeView)
-        
+        let homeView = HomeView()
+        let hostingController = UIHostingController(rootView: homeView)
+
         // 保存引用
-        self.poemHomeView = hostingController
-        
+        self.homeView = hostingController
+
         // 嵌入子视图控制器
         addChild(hostingController)
         view.addSubview(hostingController.view)
         hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-        
+
         // 设置约束以填充整个视图
         NSLayoutConstraint.activate([
             hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
@@ -49,17 +35,7 @@ class PoemViewController: UIViewController {
             hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-        
+
         hostingController.didMove(toParent: self)
-    }
-    
-    @objc private func searchPoems() {
-        // 通过 NotificationCenter 通知 SwiftUI 视图显示搜索界面
-        NotificationCenter.default.post(name: NSNotification.Name("ShowPoemSearch"), object: nil)
-    }
-    
-    @objc private func refreshPoem() {
-        // 通过 NotificationCenter 通知 SwiftUI 视图刷新诗词
-        NotificationCenter.default.post(name: NSNotification.Name("RefreshPoem"), object: nil)
     }
 } 

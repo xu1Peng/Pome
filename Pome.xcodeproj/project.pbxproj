@@ -18,6 +18,10 @@
 		A8D484EF2E17AC3000AA5A8D /* PoemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D484EC2E17AC3000AA5A8D /* PoemService.swift */; };
 		A8D484F02E17AC3000AA5A8D /* Poem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D484EA2E17AC3000AA5A8D /* Poem.swift */; };
 		A8D484F12E17AC3000AA5A8D /* PoemHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D484EB2E17AC3000AA5A8D /* PoemHomeView.swift */; };
+		3D6C3B33EB4842E6B1D14279 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA46C7C2499F485482AE119F /* Theme.swift */; };
+		F1A605ED025A43BF9D3BEEF9 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73235389B46446D4A07470D0 /* HomeView.swift */; };
+		8D6E01CF326C4F8A81C5114F /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2198CAB0D4084AD2834FA625 /* DiscoverViewController.swift */; };
+		A1B2C3D4E5F6G7H8I9J0K1L2 /* BookshelfViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6G7H8I9J0K1L2M3 /* BookshelfViewController.swift */; };
 		A8E3FF222CE342B700D99766 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3FF212CE342B700D99766 /* AppDelegate.swift */; };
 		A8E3FF242CE342B700D99766 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3FF232CE342B700D99766 /* SceneDelegate.swift */; };
 		A8E3FF292CE342B700D99766 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = A8E3FF282CE342B700D99766 /* Base */; };
@@ -58,6 +62,10 @@
 		A8D484EB2E17AC3000AA5A8D /* PoemHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoemHomeView.swift; sourceTree = "<group>"; };
 		A8D484EC2E17AC3000AA5A8D /* PoemService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoemService.swift; sourceTree = "<group>"; };
 		A8D484ED2E17AC3000AA5A8D /* PoemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoemView.swift; sourceTree = "<group>"; };
+		FA46C7C2499F485482AE119F /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		73235389B46446D4A07470D0 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		2198CAB0D4084AD2834FA625 /* DiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
+		B2C3D4E5F6G7H8I9J0K1L2M3 /* BookshelfViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookshelfViewController.swift; sourceTree = "<group>"; };
 		A8E3FF1E2CE342B700D99766 /* Pome.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pome.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8E3FF212CE342B700D99766 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A8E3FF232CE342B700D99766 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -140,6 +148,10 @@
 				A8D484EB2E17AC3000AA5A8D /* PoemHomeView.swift */,
 				A8D484EC2E17AC3000AA5A8D /* PoemService.swift */,
 				A8D484ED2E17AC3000AA5A8D /* PoemView.swift */,
+				FA46C7C2499F485482AE119F /* Theme.swift */,
+				73235389B46446D4A07470D0 /* HomeView.swift */,
+				2198CAB0D4084AD2834FA625 /* DiscoverViewController.swift */,
+				B2C3D4E5F6G7H8I9J0K1L2M3 /* BookshelfViewController.swift */,
 				A87830B52D099F9600C6EA28 /* FullscreenImageViewController.swift */,
 				A8E3FF272CE342B700D99766 /* Main.storyboard */,
 				A87830B32D099EA500C6EA28 /* Extensions */,
@@ -313,6 +325,10 @@
 				A8D484EF2E17AC3000AA5A8D /* PoemService.swift in Sources */,
 				A8D484F02E17AC3000AA5A8D /* Poem.swift in Sources */,
 				A8D484F12E17AC3000AA5A8D /* PoemHomeView.swift in Sources */,
+				3D6C3B33EB4842E6B1D14279 /* Theme.swift in Sources */,
+				F1A605ED025A43BF9D3BEEF9 /* HomeView.swift in Sources */,
+				8D6E01CF326C4F8A81C5114F /* DiscoverViewController.swift in Sources */,
+				A1B2C3D4E5F6G7H8I9J0K1L2 /* BookshelfViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
