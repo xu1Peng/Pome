@@ -35,7 +35,7 @@ class TabBarController: UITabBarController {
         discoverNav.tabBarItem = UITabBarItem(title: "发现",
                                             image: UIImage(systemName: "sparkles"),
                                             selectedImage: UIImage(systemName: "sparkles"))
-        bookshelfNav.tabBarItem = UITabBarItem(title: "书架",
+        bookshelfNav.tabBarItem = UITabBarItem(title: "收藏",
                                              image: UIImage(systemName: "books.vertical"),
                                              selectedImage: UIImage(systemName: "books.vertical.fill"))
         profileNav.tabBarItem = UITabBarItem(title: "我的",

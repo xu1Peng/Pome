@@ -7,7 +7,7 @@ class BookshelfViewController: UIViewController {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "我的书架"
+        label.text = "我的收藏"
         label.font = .systemFont(ofSize: 24, weight: .bold)
         label.textAlignment = .center
         label.textColor = UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0)
@@ -48,7 +48,7 @@ class BookshelfViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = "书架"
+        navigationItem.title = "收藏"
         setupUI()
     }
     

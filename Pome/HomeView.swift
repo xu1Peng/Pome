@@ -9,21 +9,6 @@ struct HomeView: View {
             AppTheme.backgroundColor.ignoresSafeArea()
             
             VStack(spacing: 0) {
-                // 搜索栏
-                HStack(spacing: AppTheme.spacing_md) {
-                    Image(systemName: "magnifyingglass")
-                        .foregroundColor(AppTheme.textSecondary)
-                    
-                    Text("诗词搜索")
-                        .foregroundColor(AppTheme.textSecondary)
-                    
-                    Spacer()
-                }
-                .padding(AppTheme.spacing_md)
-                .background(AppTheme.cardBackground)
-                .cornerRadius(AppTheme.cornerRadius_md)
-                .padding(AppTheme.spacing_lg)
-                
                 ScrollView {
                     VStack(spacing: AppTheme.spacing_lg) {
                         // 每日推荐
@@ -32,24 +17,30 @@ struct HomeView: View {
                                 .font(.headline)
                                 .foregroundColor(AppTheme.textPrimary)
                                 .padding(.horizontal, AppTheme.spacing_lg)
-                            
-                            // 推荐卡片 1
-                            RecommendedPoemCard(
-                                image: "moon.stars.fill",
-                                title: "静夜思",
-                                author: "李白",
-                                description: "床前明月光，疑是地上霜。"
-                            )
-                            .padding(.horizontal, AppTheme.spacing_lg)
-                            
-                            // 推荐卡片 2
-                            RecommendedPoemCard(
-                                image: "water.waves",
-                                title: "水调歌头",
-                                author: "苏轼",
-                                description: "明月几时有，把酒问青天。"
-                            )
-                            .padding(.horizontal, AppTheme.spacing_lg)
+
+                            // 推荐卡片横排列
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: AppTheme.spacing_md) {
+                                    // 推荐卡片 1
+                                    RecommendedPoemCard(
+                                        image: "moon.stars.fill",
+                                        title: "静夜思",
+                                        author: "李白",
+                                        description: "床前明月光，疑是地上霜。"
+                                    )
+                                    .frame(width: 280)
+
+                                    // 推荐卡片 2
+                                    RecommendedPoemCard(
+                                        image: "water.waves",
+                                        title: "水调歌头",
+                                        author: "苏轼",
+                                        description: "明月几时有，把酒问青天。"
+                                    )
+                                    .frame(width: 280)
+                                }
+                                .padding(.horizontal, AppTheme.spacing_lg)
+                            }
                         }
                         
                         // 精选诗集
@@ -106,34 +97,36 @@ struct RecommendedPoemCard: View {
     let title: String
     let author: String
     let description: String
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: AppTheme.spacing_md) {
-            HStack(spacing: AppTheme.spacing_md) {
-                Image(systemName: image)
-                    .font(.system(size: 24))
-                    .foregroundColor(AppTheme.primaryColor)
-                    .frame(width: 50, height: 50)
-                    .background(AppTheme.primaryColor.opacity(0.1))
-                    .cornerRadius(AppTheme.cornerRadius_md)
-                
-                VStack(alignment: .leading, spacing: AppTheme.spacing_xs) {
-                    Text(title)
-                        .font(.headline)
-                        .foregroundColor(AppTheme.textPrimary)
-                    
-                    Text(author)
-                        .font(.caption)
-                        .foregroundColor(AppTheme.textSecondary)
-                }
-                
-                Spacer()
-            }
-            
-            Text(description)
-                .font(.subheadline)
+            // 图片区域
+            Image(systemName: image)
+                .font(.system(size: 60))
+                .foregroundColor(AppTheme.primaryColor)
+                .frame(maxWidth: .infinity)
+                .frame(height: 120)
+                .background(AppTheme.primaryColor.opacity(0.1))
+                .cornerRadius(AppTheme.cornerRadius_md)
+
+            // 标题
+            Text(title)
+                .font(.headline)
+                .foregroundColor(AppTheme.textPrimary)
+
+            // 作者
+            Text(author)
+                .font(.caption)
                 .foregroundColor(AppTheme.textSecondary)
-                .lineLimit(2)
+
+            // 描述
+            Text(description)
+                .font(.caption)
+                .foregroundColor(AppTheme.textSecondary)
+                .lineLimit(3)
+                .multilineTextAlignment(.leading)
+
+            Spacer()
         }
         .padding(AppTheme.spacing_md)
         .background(AppTheme.cardBackground)

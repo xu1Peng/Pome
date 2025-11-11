@@ -6,7 +6,7 @@ struct AppTheme {
     static let primaryColor = Color(red: 0.4, green: 0.5, blue: 0.8)  // 蓝紫色
     static let secondaryColor = Color(red: 0.9, green: 0.5, blue: 0.6)  // 粉色
     static let accentColor = Color(red: 0.95, green: 0.4, blue: 0.5)  // 红粉色
-    static let backgroundColor = Color(UIColor(red: 0.98, green: 0.98, blue: 0.99, alpha: 1.0))
+    static let backgroundColor = Color(UIColor(red: 246/255.0, green: 243/255.0, blue: 238/255.0, alpha: 1.0))
     static let cardBackground = Color.white
     static let textPrimary = Color(UIColor(red: 0.2, green: 0.2, blue: 0.2, alpha: 1.0))
     static let textSecondary = Color(UIColor(red: 0.6, green: 0.6, blue: 0.6, alpha: 1.0))
