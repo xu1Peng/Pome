@@ -16,7 +16,7 @@ struct AppTheme {
     static let spacing_xs: CGFloat = 4
     static let spacing_sm: CGFloat = 8
     static let spacing_md: CGFloat = 12
-    static let spacing_lg: CGFloat = 16
+    static let spacing_lg: CGFloat = 15
     static let spacing_xl: CGFloat = 20
     static let spacing_xxl: CGFloat = 24
     
