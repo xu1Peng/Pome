@@ -11,6 +11,11 @@ class PoemViewController: UIViewController {
         // 设置导航栏
         navigationItem.title = "首页"
 
+        // 设置导航控制器代理
+        navigationController?.delegate = self
+
+
+
         // 嵌入 SwiftUI 视图
         embedHomeView()
     }
@@ -38,4 +43,14 @@ class PoemViewController: UIViewController {
 
         hostingController.didMove(toParent: self)
     }
-} 
+}
+
+// MARK: - UINavigationControllerDelegate
+extension PoemViewController: UINavigationControllerDelegate {
+    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+        // 判断将要显示的页面是否是根页面
+        let isRootVC = (viewController == navigationController.viewControllers.first)
+        // 如果不是根页面（即二级页面），则隐藏TabBar
+        viewController.hidesBottomBarWhenPushed = !isRootVC
+    }
+}

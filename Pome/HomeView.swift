@@ -2,18 +2,17 @@ import SwiftUI
 
 struct HomeView: View {
     @StateObject private var poemService = PoemService()
-    @State private var selectedPoem: Poem?
     @State private var isShowingSearch = false
 
     var body: some View {
-        ZStack {
-            AppTheme.backgroundColor.ignoresSafeArea()
+            ZStack {
+                AppTheme.backgroundColor.ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                // 顶部导航栏
-//                HomeHeaderView(isShowingSearch: $isShowingSearch)
+                VStack(spacing: 0) {
+                    // 顶部导航栏
+//                    HomeHeaderView(isShowingSearch: $isShowingSearch)
 
-                ScrollView {
+                    ScrollView {
                     VStack(spacing: AppTheme.spacing_lg) {
                         Spacer().frame(height: 5)
 
@@ -27,23 +26,13 @@ struct HomeView: View {
                             // 推荐卡片横排列
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: AppTheme.spacing_md) {
-                                    // 推荐卡片 1
-                                    RecommendedPoemCard(
-                                        imageName: "poem_moonlight",
-                                        title: "静夜思",
-                                        author: "李白",
-                                        description: "床前明月光，疑是地上霜。"
-                                    )
-                                    .frame(width: 280)
-
-                                    // 推荐卡片 2
-                                    RecommendedPoemCard(
-                                        imageName: "poem_water",
-                                        title: "水调歌头",
-                                        author: "苏轼",
-                                        description: "明月几时有，把酒问青天。"
-                                    )
-                                    .frame(width: 280)
+                                    ForEach(poemService.getDailyRecommendations()) { poem in
+                                        NavigationLink(destination: PoemDetailView(poem: poem)) {
+                                            RecommendedPoemCard(poem: poem)
+                                                .frame(width: 280)
+                                        }
+                                        .buttonStyle(PlainButtonStyle())
+                                    }
                                 }
                                 .padding(.horizontal, AppTheme.spacing_lg)
                             }
@@ -85,13 +74,14 @@ struct HomeView: View {
                         }
 
                         Spacer().frame(height: AppTheme.spacing_lg)
+                        Spacer().frame(height: AppTheme.spacing_lg)
+                    }
                     }
                 }
             }
-        }
+
         .sheet(isPresented: $isShowingSearch) {
             SearchView(poemService: poemService) { poem in
-                selectedPoem = poem
                 isShowingSearch = false
             }
         }
@@ -139,72 +129,79 @@ struct HomeView: View {
 
 // 推荐诗词卡片
 struct RecommendedPoemCard: View {
-    let imageName: String
-    let title: String
-    let author: String
-    let description: String
+    let poem: Poem
+
+    // 根据诗词内容生成不同的渐变色
+    private var gradientColors: [Color] {
+        let hash = abs(poem.title.hashValue)
+        let colorSets: [[Color]] = [
+            [Color(red: 0.1, green: 0.3, blue: 0.5), Color(red: 0.2, green: 0.4, blue: 0.6)],
+            [Color(red: 0.3, green: 0.1, blue: 0.5), Color(red: 0.4, green: 0.2, blue: 0.6)],
+            [Color(red: 0.5, green: 0.3, blue: 0.1), Color(red: 0.6, green: 0.4, blue: 0.2)],
+            [Color(red: 0.1, green: 0.5, blue: 0.3), Color(red: 0.2, green: 0.6, blue: 0.4)],
+            [Color(red: 0.5, green: 0.1, blue: 0.3), Color(red: 0.6, green: 0.2, blue: 0.4)]
+        ]
+        return colorSets[hash % colorSets.count]
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: AppTheme.spacing_md) {
-            // 图片区域 - 使用渐变背景模拟图片
-            ZStack {
-                // 背景渐变
-                LinearGradient(
-                    gradient: Gradient(colors: [
-                        Color(red: 0.1, green: 0.3, blue: 0.5),
-                        Color(red: 0.2, green: 0.4, blue: 0.6)
-                    ]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
+                // 图片区域 - 使用渐变背景模拟图片
+                ZStack {
+                    // 背景渐变
+                    LinearGradient(
+                        gradient: Gradient(colors: gradientColors),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
 
-                // 装饰元素
-                VStack {
-                    HStack {
-                        Circle()
-                            .fill(Color.white.opacity(0.3))
-                            .frame(width: 40, height: 40)
+                    // 装饰元素
+                    VStack {
+                        HStack {
+                            Circle()
+                                .fill(Color.white.opacity(0.3))
+                                .frame(width: 40, height: 40)
+                            Spacer()
+                        }
+                        .padding()
+
                         Spacer()
-                    }
-                    .padding()
 
-                    Spacer()
-
-                    HStack {
-                        Spacer()
-                        Circle()
-                            .fill(Color.white.opacity(0.2))
-                            .frame(width: 60, height: 60)
-                            .padding()
+                        HStack {
+                            Spacer()
+                            Circle()
+                                .fill(Color.white.opacity(0.2))
+                                .frame(width: 60, height: 60)
+                                .padding()
+                        }
                     }
                 }
+                .frame(height: 160)
+                .cornerRadius(AppTheme.cornerRadius_md)
+
+                // 标题
+                Text(poem.title)
+                    .font(.headline)
+                    .foregroundColor(AppTheme.textPrimary)
+
+                // 作者和朝代
+                Text("\(poem.dynasty) · \(poem.writer)")
+                    .font(.caption)
+                    .foregroundColor(AppTheme.textSecondary)
+
+                // 诗词内容预览（取前两句）
+                Text(poem.content.components(separatedBy: "\n").prefix(2).joined(separator: "\n"))
+                    .font(.caption)
+                    .foregroundColor(AppTheme.textSecondary)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+
+                Spacer()
             }
-            .frame(height: 160)
+            .padding(AppTheme.spacing_md)
+            .background(AppTheme.cardBackground)
             .cornerRadius(AppTheme.cornerRadius_md)
-
-            // 标题
-            Text(title)
-                .font(.headline)
-                .foregroundColor(AppTheme.textPrimary)
-
-            // 作者
-            Text(author)
-                .font(.caption)
-                .foregroundColor(AppTheme.textSecondary)
-
-            // 描述
-            Text(description)
-                .font(.caption)
-                .foregroundColor(AppTheme.textSecondary)
-                .lineLimit(2)
-                .multilineTextAlignment(.leading)
-
-            Spacer()
-        }
-        .padding(AppTheme.spacing_md)
-        .background(AppTheme.cardBackground)
-        .cornerRadius(AppTheme.cornerRadius_md)
-        .shadow(color: AppTheme.shadowColor, radius: AppTheme.shadowRadius, x: 0, y: 2)
+            .shadow(color: AppTheme.shadowColor, radius: AppTheme.shadowRadius, x: 0, y: 2)
     }
 }
 
