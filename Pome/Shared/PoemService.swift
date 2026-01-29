@@ -6,12 +6,11 @@ class PoemService: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String? = nil
     
-    // 更换为一个更稳定的免费API接口
-    private let poemDataURL = "https://hub.saintic.com/openservice/sentence/all.json"
-    // private let poemDataURL = "https://v1.jinrishici.com/all.json"
-    // https://v1.jinrishici.com/all.svg
-    // https://v1.jinrishici.com/shuqing/libie.png
-    // https://v1.jinrishici.com/rensheng.txt
+    // 今日诗词API URL
+    private let poemDataURL = "https://v2.jinrishici.com/one.json"
+    
+    // 用于存储Token的Key
+    private let tokenKey = "jinrishici-token"
 
     private let localPoemFilename = "localPoems.json"
     private let networkMonitor = NWPathMonitor()
@@ -23,10 +22,176 @@ class PoemService: ObservableObject {
         setupNetworkMonitoring()
         // 初始化时尝试从本地加载
         loadLocalPoems()
+        // 加载内置的唐诗宋词库
+        loadResourcePoems()
     }
     
     deinit {
         networkMonitor.cancel()
+    }
+    
+    // 加载内置的唐诗宋词
+    private func loadResourcePoems() {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            var newPoems: [Poem] = []
+            
+            // 解析唐诗
+            if let tangData = PoemData.tangShiJSON.data(using: .utf8) {
+                struct TangPoem: Codable {
+                    let author: String
+                    let paragraphs: [String]
+                    let title: String
+                }
+                do {
+                    let tangPoems = try JSONDecoder().decode([TangPoem].self, from: tangData)
+                    let poems = tangPoems.map { p in
+                        Poem(
+                            id: UUID(),
+                            title: p.title,
+                            dynasty: "唐代",
+                            writer: p.author,
+                            content: p.paragraphs.joined(separator: "\n"),
+                            remark: nil,
+                            translation: nil,
+                            shangxi: nil
+                        )
+                    }
+                    newPoems.append(contentsOf: poems)
+                    print("加载了 \(poems.count) 首唐诗")
+                } catch {
+                    print("解析唐诗失败: \(error)")
+                }
+            }
+            
+            // 解析宋词
+            if let songData = PoemData.songCiJSON.data(using: .utf8) {
+                struct SongPoem: Codable {
+                    let author: String
+                    let paragraphs: [String]
+                    let rhythmic: String
+                }
+                do {
+                    let songPoems = try JSONDecoder().decode([SongPoem].self, from: songData)
+                    let poems = songPoems.map { p in
+                        Poem(
+                            id: UUID(),
+                            title: p.rhythmic,
+                            dynasty: "宋代",
+                            writer: p.author,
+                            content: p.paragraphs.joined(separator: "\n"),
+                            remark: nil,
+                            translation: nil,
+                            shangxi: nil
+                        )
+                    }
+                    newPoems.append(contentsOf: poems)
+                    print("加载了 \(poems.count) 首宋词")
+                } catch {
+                    print("解析宋词失败: \(error)")
+                }
+            }
+            
+            // 解析诗经
+            if let shijingData = PoemData.shijingJSON.data(using: .utf8) {
+                struct ShijingPoem: Codable {
+                    let title: String
+                    let chapter: String
+                    let section: String
+                    let content: [String]
+                }
+                do {
+                    let shijingPoems = try JSONDecoder().decode([ShijingPoem].self, from: shijingData)
+                    let poems = shijingPoems.map { p in
+                        Poem(
+                            id: UUID(),
+                            title: p.title,
+                            dynasty: "先秦",
+                            writer: "诗经",
+                            content: p.content.joined(separator: "\n"),
+                            remark: "\(p.chapter) · \(p.section)",
+                            translation: nil,
+                            shangxi: nil
+                        )
+                    }
+                    newPoems.append(contentsOf: poems)
+                    print("加载了 \(poems.count) 首诗经")
+                } catch {
+                    print("解析诗经失败: \(error)")
+                }
+            }
+            
+            // 解析楚辞
+            if let chuciData = PoemData.chuciJSON.data(using: .utf8) {
+                struct ChuciPoem: Codable {
+                    let title: String
+                    let author: String
+                    let content: [String]
+                    let section: String
+                }
+                do {
+                    let chuciPoems = try JSONDecoder().decode([ChuciPoem].self, from: chuciData)
+                    let poems = chuciPoems.map { p in
+                        Poem(
+                            id: UUID(),
+                            title: p.title,
+                            dynasty: "先秦",
+                            writer: p.author,
+                            content: p.content.joined(separator: "\n"),
+                            remark: p.section,
+                            translation: nil,
+                            shangxi: nil
+                        )
+                    }
+                    newPoems.append(contentsOf: poems)
+                    print("加载了 \(poems.count) 首楚辞")
+                } catch {
+                    print("解析楚辞失败: \(error)")
+                }
+            }
+            
+
+            
+            // 解析毛泽东诗词
+            if let maoData = PoemData.maoZeDongJSON.data(using: .utf8) {
+                struct MaoPoem: Codable {
+                    let title: String
+                    let paragraphs: [String]
+                    let author: String
+                    let dynasty: String
+                }
+                do {
+                    let maoPoems = try JSONDecoder().decode([MaoPoem].self, from: maoData)
+                    let poems = maoPoems.map { p in
+                        Poem(
+                            id: UUID(),
+                            title: p.title,
+                            dynasty: p.dynasty,
+                            writer: p.author,
+                            content: p.paragraphs.joined(separator: "\n"),
+                            remark: nil,
+                            translation: nil,
+                            shangxi: nil
+                        )
+                    }
+                    newPoems.append(contentsOf: poems)
+                    print("加载了 \(poems.count) 首毛泽东诗词")
+                } catch {
+                    print("解析毛泽东诗词失败: \(error)")
+                }
+            }
+            
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                // 合并到现有列表（简单的去重）
+                let existingTitles = Set(self.poems.map { $0.title + $0.writer })
+                let uniqueNewPoems = newPoems.filter { !existingTitles.contains($0.title + $0.writer) }
+                
+                if !uniqueNewPoems.isEmpty {
+                    self.poems.append(contentsOf: uniqueNewPoems)
+                    print("合并后共有 \(self.poems.count) 首诗词")
+                }
+            }
+        }
     }
     
     // 设置网络监控
@@ -58,22 +223,53 @@ class PoemService: ObservableObject {
                 let decodedPoems = try JSONDecoder().decode([Poem].self, from: data)
                 self.poems = decodedPoems
                 print("成功从本地加载了 \(decodedPoems.count) 首诗")
+                
+                // 即使本地加载成功，如果网络可用，也尝试从网络获取最新数据
+                if isConnected {
+                    fetchPoemsFromNetwork()
+                }
             } catch {
                 errorMessage = "从本地加载失败: \(error.localizedDescription)"
                 print("从本地加载失败: \(error)")
                 
+                // 尝试从 Bundle 加载预置数据
+                loadBundledPoems()
+                
                 // 如果本地加载失败且网络可用，尝试从网络获取
-                if isConnected {
+                if isConnected && poems.isEmpty {
                     fetchPoemsFromNetwork()
                 }
             }
         } else {
-            // 如果本地没有数据，从网络获取
-            if isConnected {
+            // 如果本地没有数据，先尝试从 Bundle 加载预置数据
+            loadBundledPoems()
+            
+            // 如果仍然没有数据且网络可用，从网络获取
+            if isConnected && poems.isEmpty {
                 fetchPoemsFromNetwork()
-            } else {
+            } else if poems.isEmpty {
                 errorMessage = "没有本地数据且网络不可用"
             }
+        }
+    }
+    
+    // 从 Bundle 加载预置诗词
+    private func loadBundledPoems() {
+        guard let bundleURL = Bundle.main.url(forResource: "localPoems", withExtension: "json") else {
+            print("Bundle 中未找到 localPoems.json")
+            return
+        }
+        
+        do {
+            let data = try Data(contentsOf: bundleURL)
+            let decodedPoems = try JSONDecoder().decode([Poem].self, from: data)
+            self.poems = decodedPoems
+            print("成功从 Bundle 加载了 \(decodedPoems.count) 首诗")
+            
+            // 可选：将预置数据保存到文档目录，以便后续使用
+            // savePoemsToLocal() 
+        } catch {
+            print("从 Bundle 加载失败: \(error)")
         }
     }
     
@@ -95,8 +291,13 @@ class PoemService: ObservableObject {
         
         var request = URLRequest(url: url)
         request.timeoutInterval = 15 // 设置15秒超时
-        // 设置User-Agent（这个API需要User-Agent）
+        // 设置User-Agent
         request.addValue("Pome/1.0 iOS-App", forHTTPHeaderField: "User-Agent")
+        
+        // 如果有Token，添加到Header中
+        if let token = UserDefaults.standard.string(forKey: tokenKey) {
+            request.addValue(token, forHTTPHeaderField: "X-User-Token")
+        }
         
         let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
             guard let self = self else { return }
@@ -155,121 +356,70 @@ class PoemService: ObservableObject {
                 }
                 
                 do {
-                    // 处理API的JSON响应格式
-                    let sentenceResponse = try JSONDecoder().decode(SentenceResponse.self, from: data)
+                    // 处理今日诗词API的JSON响应格式
+                    let responseObj = try JSONDecoder().decode(JinrishiciResponse.self, from: data)
                     
-                    if sentenceResponse.success {
-                        // 创建一个诗词收集数组
-                        var collectedPoems: [Poem] = []
+                    if responseObj.status == "success" {
+                        // 如果有新的Token，保存它
+                        if let token = responseObj.token {
+                            UserDefaults.standard.set(token, forKey: self.tokenKey)
+                        }
                         
-                        // 将名句转换为Poem格式
-                        let sentenceData = sentenceResponse.data
-                        let sentence = sentenceData.sentence
+                        let data = responseObj.data
+                        
+                        // 优先使用 origin (全诗)，如果不存在则使用 content (名句)
+                        var content = data.content
+                        var title = "未知标题"
+                        var dynasty = "未知朝代"
+                        var author = "未知作者"
+                        var translation: String? = nil
+                        
+                        if let origin = data.origin {
+                            title = origin.title
+                            dynasty = origin.dynasty
+                            author = origin.author
+                            content = origin.content.joined(separator: "\n")
+                            if let translate = origin.translate {
+                                translation = translate.joined(separator: "\n")
+                            }
+                        }
+                        
                         let poem = Poem(
                             id: UUID(),
-                            title: sentenceData.title ?? "名句",
-                            dynasty: sentenceData.dynasty ?? "未知",
-                            writer: sentenceData.author,
-                            content: sentence,
+                            title: title,
+                            dynasty: dynasty,
+                            writer: author,
+                            content: content,
                             remark: nil,
-                            translation: nil,
+                            translation: translation,
                             shangxi: nil
                         )
-                        collectedPoems.append(poem)
                         
-                        // 如果只有一个名句，多次请求获取更多
-                        self.fetchMorePoems(collectedPoems: collectedPoems, remaining: 9)
+                        print("========== 网络诗词获取成功 ==========")
+                        print("标题: \(title)")
+                        print("朝代: \(dynasty)")
+                        print("作者: \(author)")
+                        print("内容:\n\(content)")
+                        if let trans = translation {
+                            print("翻译:\n\(trans)")
+                        }
+                        print("=====================================")
+                        
+                        // 由于API每次只返回一首，我们将其添加到列表头部
+                        // 注意：这里需要考虑是否去重
+                        if !self.poems.contains(where: { $0.title == poem.title && $0.content == poem.content }) {
+                            self.poems.insert(poem, at: 0)
+                        }
+                        
+                        // 保存更新后的列表到本地
+                        self.savePoems(self.poems)
+                        
                     } else {
-                        self.errorMessage = "API返回错误: \(sentenceResponse.message ?? "未知错误")"
+                        self.errorMessage = "API返回错误"
                     }
                 } catch let error {
                     self.errorMessage = "数据解析错误: \(error.localizedDescription)"
                     print("数据解析错误: \(error)")
-                }
-            }
-        }
-        
-        task.resume()
-    }
-    
-    // 递归获取更多诗句
-    private func fetchMorePoems(collectedPoems: [Poem], remaining: Int) {
-        // 如果已经获取了足够的诗词或不需要更多，就保存并更新
-        if remaining <= 0 {
-            self.poems = collectedPoems
-            self.errorMessage = nil
-            print("成功从网络加载了 \(collectedPoems.count) 首诗")
-            
-            // 保存到本地
-            self.savePoems(collectedPoems)
-            return
-        }
-        
-        // 继续请求更多诗词
-        guard let url = URL(string: poemDataURL) else {
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.timeoutInterval = 15
-        request.addValue("Pome/1.0 iOS-App", forHTTPHeaderField: "User-Agent")
-        
-        let task = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
-            guard let self = self else { return }
-            
-            DispatchQueue.main.async {
-                if let error = error {
-                    print("获取更多诗词时出错: \(error.localizedDescription)")
-                    // 发生错误时也保存已有的数据
-                    self.poems = collectedPoems
-                    self.errorMessage = nil
-                    self.savePoems(collectedPoems)
-                    return
-                }
-                
-                guard let data = data else {
-                    // 没有数据时也保存已有的
-                    self.poems = collectedPoems
-                    self.errorMessage = nil
-                    self.savePoems(collectedPoems)
-                    return
-                }
-                
-                do {
-                    let sentenceResponse = try JSONDecoder().decode(SentenceResponse.self, from: data)
-                    
-                    if sentenceResponse.success {
-                        let sentenceData = sentenceResponse.data
-                        let sentence = sentenceData.sentence
-                        let newPoem = Poem(
-                            id: UUID(),
-                            title: sentenceData.title ?? "名句",
-                            dynasty: sentenceData.dynasty ?? "未知",
-                            writer: sentenceData.author,
-                            content: sentence,
-                            remark: nil,
-                            translation: nil,
-                            shangxi: nil
-                        )
-                        
-                        // 将新诗添加到收集中
-                        var updatedCollection = collectedPoems
-                        updatedCollection.append(newPoem)
-                        
-                        // 递归调用获取更多
-                        self.fetchMorePoems(collectedPoems: updatedCollection, remaining: remaining - 1)
-                    } else {
-                        // API返回错误时也保存已有的数据
-                        self.poems = collectedPoems
-                        self.errorMessage = nil
-                        self.savePoems(collectedPoems)
-                    }
-                } catch {
-                    // 解析错误时也保存已有的数据
-                    print("解析更多诗词时出错: \(error.localizedDescription)")
-                    self.poems = collectedPoems
-                    self.errorMessage = nil
-                    self.savePoems(collectedPoems)
                 }
             }
         }
@@ -392,6 +542,14 @@ class PoemService: ObservableObject {
 
     // 获取每日推荐诗词
     func getDailyRecommendations() -> [Poem] {
+        // 如果有网络获取的/本地缓存的诗词，优先展示这些
+        if !poems.isEmpty {
+            // 如果数量太少，可以补上预置的推荐诗词
+            if poems.count < 5 {
+                return poems + Self.dailyRecommendations
+            }
+            return poems
+        }
         return Self.dailyRecommendations
     }
 
@@ -433,18 +591,99 @@ class PoemService: ObservableObject {
     }
 }
 
-// 定义名句API响应的数据结构
-struct SentenceResponse: Codable {
-    let success: Bool
-    let data: SentenceData
-    let message: String?
+// 今日诗词 API 响应结构
+struct JinrishiciResponse: Codable {
+    let status: String
+    let data: JinrishiciData
+    let token: String?
+    let ipAddress: String?
 }
 
-// 名句数据结构
-struct SentenceData: Codable {
+struct JinrishiciData: Codable {
+    let id: String?
+    let content: String
+    let popularity: Int?
+    let origin: JinrishiciOrigin?
+    let matchTags: [String]?
+    let recommendedReason: String?
+    let cacheAt: String?
+}
+
+struct JinrishiciOrigin: Codable {
+    let title: String
+    let dynasty: String
     let author: String
-    let sentence: String
-    let dynasty: String?
-    let title: String?
-    let origin: String?
-} 
+    let content: [String]
+    let translate: [String]?
+}
+
+extension PoemData {
+    static let shijingJSON = #"""
+[
+  {
+    "title": "关雎",
+    "chapter": "国风",
+    "section": "周南",
+    "content": [
+      "关关雎鸠，在河之洲。窈窕淑女，君子好逑。",
+      "参差荇菜，左右流之。窈窕淑女，寤寐求之。",
+      "求之不得，寤寐思服。悠哉悠哉，辗转反侧。",
+      "参差荇菜，左右采之。窈窕淑女，琴瑟友之。",
+      "参差荇菜，左右芼之。窈窕淑女，钟鼓乐之。"
+    ]
+  },
+  {
+    "title": "桃夭",
+    "chapter": "国风",
+    "section": "周南",
+    "content": [
+      "桃之夭夭，灼灼其华。之子于归，宜其室家。",
+      "桃之夭夭，有蕡其实。之子于归，宜其家室。",
+      "桃之夭夭，其叶蓁蓁。之子于归，宜其家人。"
+    ]
+  }
+]
+"""#
+
+    static let chuciJSON = #"""
+[
+    {
+        "title": "国殇",
+        "section": "九歌",
+        "author": "屈原",
+        "content": [
+            "操吴戈兮被犀甲，车错毂兮短兵接",
+            "旌蔽日兮敌若云，矢交坠兮士争先",
+            "凌余阵兮躐余行，左骖殪兮右刃伤",
+            "霾两轮兮絷四马，援玉枹兮击鸣鼓",
+            "天时怼兮威灵怒，严杀尽兮弃原野",
+            "出不入兮往不反，平原忽兮路超远",
+            "带长剑兮挟秦弓，首身离兮心不惩",
+            "诚既勇兮又以武，终刚强兮不可凌",
+            "身既死兮神以灵，魂魄毅兮为鬼雄。"
+        ]
+    },
+    {
+        "title": "山鬼",
+        "section": "九歌",
+        "author": "屈原",
+        "content": [
+            "若有人兮山之阿，被薜荔兮带女萝",
+            "既含睇兮又宜笑，子慕予兮善窈窕",
+            "乘赤豹兮从文狸，辛夷车兮结桂旗",
+            "被石兰兮带杜衡，折芬馨兮遗所思",
+            "余处幽篁兮终不见天，路险难兮独后来",
+            "表独立兮山之上，云容容兮而在下",
+            "杳冥冥兮羌昼晦，东风飘兮神灵雨",
+            "留灵修兮憺忘归，岁既晏兮孰华予",
+            "采三秀兮于山间，石磊磊兮葛蔓蔓",
+            "怨公子兮怅忘归，君思我兮不得闲",
+            "山中人兮芳杜若，饮石泉兮荫松柏",
+            "君思我兮然疑作",
+            "雷填填兮雨冥冥，猿啾啾兮狖夜鸣",
+            "风飒飒兮木萧萧，思公子兮徒离忧。"
+        ]
+    }
+]
+"""#
+}

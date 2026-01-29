@@ -6,6 +6,8 @@ struct PoemHomeView: View {
     @State private var searchText = ""
     @State private var isShowingSearch = false
     @State private var isShowingErrorAlert = false
+
+
     let title: String
 
     init(title: String = "诗歌") {

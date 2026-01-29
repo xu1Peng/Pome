@@ -1,4 +1,5 @@
 import UIKit
+import SwiftUI
 
 class BookshelfViewController: UIViewController {
     
@@ -68,6 +69,7 @@ class BookshelfViewController: UIViewController {
         tableView.dataSource = self
         
         // ScrollView 约束
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -126,7 +128,11 @@ extension BookshelfViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let (title, _, _) = bookshelfItems[indexPath.row]
-        print("点击了: \(title)")
+        
+        let poemListView = PoemListView(title: title)
+        let hostingController = UIHostingController(rootView: poemListView)
+        hostingController.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(hostingController, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -137,7 +143,7 @@ extension BookshelfViewController: UITableViewDelegate, UITableViewDataSource {
 // MARK: - BookshelfCell
 class BookshelfCell: UITableViewCell {
     private let iconView = UIView()
-    private let iconLabel = UILabel()
+    private let iconImageView = UIImageView()
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
     private let arrowLabel = UILabel()
@@ -161,11 +167,11 @@ class BookshelfCell: UITableViewCell {
         iconView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(iconView)
         
-        // Icon Label
-        iconLabel.font = .systemFont(ofSize: 20)
-        iconLabel.textAlignment = .center
-        iconLabel.translatesAutoresizingMaskIntoConstraints = false
-        iconView.addSubview(iconLabel)
+        // Icon ImageView
+        iconImageView.contentMode = .scaleAspectFit
+        iconImageView.tintColor = UIColor(red: 0.4, green: 0.5, blue: 0.8, alpha: 1.0)
+        iconImageView.translatesAutoresizingMaskIntoConstraints = false
+        iconView.addSubview(iconImageView)
         
         // Title Label
         titleLabel.font = .systemFont(ofSize: 16, weight: .semibold)
@@ -193,11 +199,13 @@ class BookshelfCell: UITableViewCell {
             iconView.widthAnchor.constraint(equalToConstant: 50),
             iconView.heightAnchor.constraint(equalToConstant: 50),
             
-            iconLabel.centerXAnchor.constraint(equalTo: iconView.centerXAnchor),
-            iconLabel.centerYAnchor.constraint(equalTo: iconView.centerYAnchor),
+            iconImageView.centerXAnchor.constraint(equalTo: iconView.centerXAnchor),
+            iconImageView.centerYAnchor.constraint(equalTo: iconView.centerYAnchor),
+            iconImageView.widthAnchor.constraint(equalToConstant: 24),
+            iconImageView.heightAnchor.constraint(equalToConstant: 24),
             
             titleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 12),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 14),
             
             subtitleLabel.leadingAnchor.constraint(equalTo: iconView.trailingAnchor, constant: 12),
             subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 4),
@@ -209,7 +217,7 @@ class BookshelfCell: UITableViewCell {
     
     func configure(title: String, icon: String, subtitle: String) {
         titleLabel.text = title
-        iconLabel.text = icon
+        iconImageView.image = UIImage(systemName: icon)
         subtitleLabel.text = subtitle
     }
 }

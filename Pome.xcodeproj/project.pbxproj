@@ -21,6 +21,7 @@
 		3D6C3B33EB4842E6B1D14279 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA46C7C2499F485482AE119F /* Theme.swift */; };
 		F1A605ED025A43BF9D3BEEF9 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73235389B46446D4A07470D0 /* HomeView.swift */; };
 		A8D484F22E17AC3100AA5A8D /* PoemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D484F32E17AC3100AA5A8D /* PoemDetailView.swift */; };
+		A8D484F52E17AC3200AA5A8D /* PoemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D484F42E17AC3200AA5A8D /* PoemListView.swift */; };
 		8D6E01CF326C4F8A81C5114F /* DiscoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2198CAB0D4084AD2834FA625 /* DiscoverViewController.swift */; };
 		A1B2C3D4E5F6G7H8I9J0K1L2 /* BookshelfViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6G7H8I9J0K1L2M3 /* BookshelfViewController.swift */; };
 		A8E3FF222CE342B700D99766 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3FF212CE342B700D99766 /* AppDelegate.swift */; };
@@ -62,6 +63,7 @@
 		A8D484EC2E17AC3000AA5A8D /* PoemService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoemService.swift; sourceTree = "<group>"; };
 		A8D484ED2E17AC3000AA5A8D /* PoemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoemView.swift; sourceTree = "<group>"; };
 		A8D484F32E17AC3100AA5A8D /* PoemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoemDetailView.swift; sourceTree = "<group>"; };
+		A8D484F42E17AC3200AA5A8D /* PoemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoemListView.swift; sourceTree = "<group>"; };
 		FA46C7C2499F485482AE119F /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		73235389B46446D4A07470D0 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		2198CAB0D4084AD2834FA625 /* DiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
@@ -193,6 +195,7 @@
 			isa = PBXGroup;
 			children = (
 				B2C3D4E5F6G7H8I9J0K1L2M3 /* BookshelfViewController.swift */,
+				A8D484F42E17AC3200AA5A8D /* PoemListView.swift */,
 			);
 			path = Bookshelf;
 			sourceTree = "<group>";
@@ -384,6 +387,7 @@
 				A8D484F22E17AC3100AA5A8D /* PoemDetailView.swift in Sources */,
 				8D6E01CF326C4F8A81C5114F /* DiscoverViewController.swift in Sources */,
 				A1B2C3D4E5F6G7H8I9J0K1L2 /* BookshelfViewController.swift in Sources */,
+				A8D484F52E17AC3200AA5A8D /* PoemListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
