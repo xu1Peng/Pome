@@ -97,6 +97,20 @@ struct PoemHomeView: View {
                                 }
                             )
 
+                            // 年级分类
+                            CategorySection(
+                                title: "按年级分类",
+                                items: ["小学", "初中", "高中"],
+                                onSelect: { grade in
+                                    let poems = poemService.getPoemsByGrade(grade: grade)
+                                    if let randomPoem = poems.randomElement() {
+                                        selectedPoem = randomPoem
+                                    } else {
+                                        selectedPoem = poemService.getRandomPoem()
+                                    }
+                                }
+                            )
+
                             Spacer().frame(height: AppTheme.spacing_lg)
                         }
                     }

@@ -41,6 +41,7 @@ class PoemService: ObservableObject {
                     let author: String
                     let paragraphs: [String]
                     let title: String
+                    let tags: [String]?
                 }
                 do {
                     let tangPoems = try JSONDecoder().decode([TangPoem].self, from: tangData)
@@ -53,7 +54,8 @@ class PoemService: ObservableObject {
                             content: p.paragraphs.joined(separator: "\n"),
                             remark: nil,
                             translation: nil,
-                            shangxi: nil
+                            shangxi: nil,
+                            tags: p.tags
                         )
                     }
                     newPoems.append(contentsOf: poems)
@@ -69,6 +71,7 @@ class PoemService: ObservableObject {
                     let author: String
                     let paragraphs: [String]
                     let rhythmic: String
+                    let tags: [String]?
                 }
                 do {
                     let songPoems = try JSONDecoder().decode([SongPoem].self, from: songData)
@@ -81,7 +84,8 @@ class PoemService: ObservableObject {
                             content: p.paragraphs.joined(separator: "\n"),
                             remark: nil,
                             translation: nil,
-                            shangxi: nil
+                            shangxi: nil,
+                            tags: p.tags
                         )
                     }
                     newPoems.append(contentsOf: poems)
@@ -579,6 +583,34 @@ class PoemService: ObservableObject {
     // 根据内容关键词筛选诗词
     func getPoemsByContent(keyword: String) -> [Poem] {
         return poems.filter { $0.content.contains(keyword) }
+    }
+    
+    // 根据标签筛选诗词
+    func getPoemsByTag(tag: String) -> [Poem] {
+        return poems.filter { $0.tags?.contains { t in t.contains(tag) } ?? false }
+    }
+    
+    // 根据年级筛选诗词
+    func getPoemsByGrade(grade: String) -> [Poem] {
+        switch grade {
+        case "小学":
+            return poems.filter { poem in
+                guard let tags = poem.tags else { return false }
+                return tags.contains { $0.contains("小学") || $0.contains("一年级") || $0.contains("二年级") || $0.contains("三年级") || $0.contains("四年级") || $0.contains("五年级") || $0.contains("六年级") }
+            }
+        case "初中":
+            return poems.filter { poem in
+                guard let tags = poem.tags else { return false }
+                return tags.contains { $0.contains("初中") || $0.contains("七年级") || $0.contains("八年级") || $0.contains("九年级") }
+            }
+        case "高中":
+            return poems.filter { poem in
+                guard let tags = poem.tags else { return false }
+                return tags.contains { $0.contains("高中") || $0.contains("高一") || $0.contains("高二") || $0.contains("高三") }
+            }
+        default:
+            return []
+        }
     }
     
     // 手动强制刷新

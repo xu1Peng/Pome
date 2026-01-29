@@ -10,6 +10,7 @@ struct Poem: Codable, Identifiable, Hashable {
     let remark: String?
     let translation: String?
     let shangxi: String?
+    let tags: [String]?
     
     // 从API获取的MongoDB ID格式
     struct MongoID: Codable {
@@ -31,6 +32,7 @@ struct Poem: Codable, Identifiable, Hashable {
         case remark
         case translation
         case shangxi
+        case tags
     }
     
     init(from decoder: Decoder) throws {
@@ -49,10 +51,11 @@ struct Poem: Codable, Identifiable, Hashable {
         remark = try container.decodeIfPresent(String.self, forKey: .remark)
         translation = try container.decodeIfPresent(String.self, forKey: .translation)
         shangxi = try container.decodeIfPresent(String.self, forKey: .shangxi)
+        tags = try container.decodeIfPresent([String].self, forKey: .tags)
     }
     
     // 添加一个标准的初始化方法以解决构造函数调用问题
-    init(id: UUID = UUID(), title: String, dynasty: String, writer: String, content: String, remark: String? = nil, translation: String? = nil, shangxi: String? = nil) {
+    init(id: UUID = UUID(), title: String, dynasty: String, writer: String, content: String, remark: String? = nil, translation: String? = nil, shangxi: String? = nil, tags: [String]? = nil) {
         self.id = id
         self.title = title
         self.dynasty = dynasty
@@ -61,6 +64,7 @@ struct Poem: Codable, Identifiable, Hashable {
         self.remark = remark
         self.translation = translation
         self.shangxi = shangxi
+        self.tags = tags
     }
     
     // 提供一个默认的诗词，以防API调用失败
