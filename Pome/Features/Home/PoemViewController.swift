@@ -14,8 +14,6 @@ class PoemViewController: UIViewController {
         // 设置导航控制器代理
         navigationController?.delegate = self
 
-
-
         // 嵌入 SwiftUI 视图
         embedHomeView()
     }
