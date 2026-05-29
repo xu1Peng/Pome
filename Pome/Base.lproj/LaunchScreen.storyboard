@@ -13,7 +13,71 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" xcode11CocoaTouchSystemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="paper-mark">
+                                <rect key="frame" x="146.5" y="188.5" width="82" height="96"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="诗" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="poem-symbol">
+                                        <rect key="frame" x="0.0" y="24" width="82" height="48"/>
+                                        <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="40"/>
+                                        <color key="textColor" red="0.4000000000" green="0.5000000000" blue="0.8000000000" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="paper-line-top">
+                                        <rect key="frame" x="22" y="76" width="38" height="1"/>
+                                        <color key="backgroundColor" red="0.8980392157" green="0.8980392157" blue="0.8980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="line-top-height"/>
+                                            <constraint firstAttribute="width" constant="38" id="line-top-width"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="paper-line-bottom">
+                                        <rect key="frame" x="28" y="84" width="26" height="1"/>
+                                        <color key="backgroundColor" red="0.8980392157" green="0.8980392157" blue="0.8980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="line-bottom-height"/>
+                                            <constraint firstAttribute="width" constant="26" id="line-bottom-width"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="0.94999999999999996" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="paper-line-top" firstAttribute="centerX" secondItem="paper-mark" secondAttribute="centerX" id="line-top-center-x"/>
+                                    <constraint firstItem="paper-line-top" firstAttribute="top" secondItem="poem-symbol" secondAttribute="bottom" constant="4" id="line-top-top"/>
+                                    <constraint firstItem="paper-line-bottom" firstAttribute="centerX" secondItem="paper-mark" secondAttribute="centerX" id="line-bottom-center-x"/>
+                                    <constraint firstItem="paper-line-bottom" firstAttribute="top" secondItem="paper-line-top" secondAttribute="bottom" constant="7" id="line-bottom-top"/>
+                                    <constraint firstItem="poem-symbol" firstAttribute="centerX" secondItem="paper-mark" secondAttribute="centerX" id="symbol-center-x"/>
+                                    <constraint firstItem="poem-symbol" firstAttribute="centerY" secondItem="paper-mark" secondAttribute="centerY" constant="-8" id="symbol-center-y"/>
+                                    <constraint firstAttribute="height" constant="96" id="paper-height"/>
+                                    <constraint firstAttribute="width" constant="82" id="paper-width"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pome" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="brand-title">
+                                <rect key="frame" x="129" y="312.5" width="117" height="46"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="38"/>
+                                <color key="textColor" red="0.2000000000" green="0.2000000000" blue="0.2000000000" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="翻开一首诗" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="brand-subtitle">
+                                <rect key="frame" x="143.5" y="366.5" width="88" height="20"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
+                                <color key="textColor" red="0.5607843137" green="0.5607843137" blue="0.5607843137" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.9647058824" green="0.9529411765" blue="0.9333333333" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="brand-title" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="title-center-x"/>
+                            <constraint firstItem="brand-title" firstAttribute="top" secondItem="paper-mark" secondAttribute="bottom" constant="28" id="title-top"/>
+                            <constraint firstItem="brand-title" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="40" id="title-leading"/>
+                            <constraint firstItem="brand-title" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="trailing" constant="-40" id="title-trailing"/>
+                            <constraint firstItem="brand-subtitle" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="subtitle-center-x"/>
+                            <constraint firstItem="brand-subtitle" firstAttribute="top" secondItem="brand-title" secondAttribute="bottom" constant="8" id="subtitle-top"/>
+                            <constraint firstItem="brand-subtitle" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="40" id="subtitle-leading"/>
+                            <constraint firstItem="brand-subtitle" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="trailing" constant="-40" id="subtitle-trailing"/>
+                            <constraint firstItem="paper-mark" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="paper-center-x"/>
+                            <constraint firstItem="paper-mark" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" constant="-97" id="paper-center-y"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>

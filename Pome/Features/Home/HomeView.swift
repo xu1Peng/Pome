@@ -1,17 +1,18 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject private var poemService = PoemService()
-    @State private var isShowingSearch = false
+    @ObservedObject private var poemService = PoemService.shared
+    let onSelectPoem: (Poem) -> Void
+
+    init(onSelectPoem: @escaping (Poem) -> Void = { _ in }) {
+        self.onSelectPoem = onSelectPoem
+    }
 
     var body: some View {
             ZStack {
                 AppTheme.backgroundColor.ignoresSafeArea()
 
                 VStack(spacing: 0) {
-                    // 顶部导航栏
-//                    HomeHeaderView(isShowingSearch: $isShowingSearch)
-
                     ScrollView {
                     VStack(spacing: AppTheme.spacing_lg) {
                         Spacer().frame(height: 5)
@@ -27,7 +28,9 @@ struct HomeView: View {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: AppTheme.spacing_md) {
                                     ForEach(poemService.getDailyRecommendations()) { poem in
-                                        NavigationLink(destination: PoemDetailView(poem: poem)) {
+                                        Button {
+                                            onSelectPoem(poem)
+                                        } label: {
                                             RecommendedPoemCard(poem: poem)
                                                 .frame(width: 280)
                                         }
@@ -79,12 +82,6 @@ struct HomeView: View {
                     }
                 }
             }
-
-        .sheet(isPresented: $isShowingSearch) {
-            SearchView(poemService: poemService) { poem in
-                isShowingSearch = false
-            }
-        }
         .onAppear {
             if poemService.poems.isEmpty {
                 poemService.loadLocalPoems()
@@ -92,40 +89,6 @@ struct HomeView: View {
         }
     }
 }
-
-// 顶部导航栏
-//struct HomeHeaderView: View {
-//    @Binding var isShowingSearch: Bool
-//
-//    var body: some View {
-//        HStack(spacing: AppTheme.spacing_lg) {
-//            // 左侧：书籍图标
-//            Image(systemName: "book.fill")
-//                .font(.system(size: 20))
-//                .foregroundColor(AppTheme.textPrimary)
-//
-//            // 中间：标题
-//            Text("诗词鉴赏")
-//                .font(.system(size: 18, weight: .semibold))
-//                .foregroundColor(AppTheme.textPrimary)
-//
-//            Spacer()
-//
-//            // 右侧：搜索图标
-//            Button(action: {
-//                isShowingSearch = true
-//            }) {
-//                Image(systemName: "magnifyingglass")
-//                    .font(.system(size: 16))
-//                    .foregroundColor(AppTheme.textPrimary)
-//            }
-//        }
-//        .padding(.horizontal, AppTheme.spacing_lg)
-//        .padding(.vertical, AppTheme.spacing_md)
-//        .background(AppTheme.backgroundColor)
-//        .border(width: 0.5, edges: [.bottom], color: AppTheme.dividerColor)
-//    }
-//}
 
 // 推荐诗词卡片
 struct RecommendedPoemCard: View {
@@ -238,7 +201,8 @@ struct CategoryItemView: View {
     }
 }
 
-#Preview {
-    HomeView()
+struct HomeView_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeView()
+    }
 }
-

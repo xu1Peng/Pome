@@ -1,4 +1,5 @@
 import UIKit
+import SwiftUI
 
 class ProfileViewController: UIViewController {
 
@@ -129,6 +130,12 @@ class ProfileViewController: UIViewController {
             tableView.heightAnchor.constraint(equalToConstant: CGFloat(menuItems.count * 56))
         ])
     }
+
+    private func showUnavailableAlert(for title: String) {
+        let alert = UIAlertController(title: title, message: "该功能正在完善中", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "知道了", style: .default))
+        present(alert, animated: true)
+    }
 }
 
 // MARK: - UITableViewDelegate & UITableViewDataSource
@@ -147,7 +154,15 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let (title, _) = menuItems[indexPath.row]
-        print("点击了: \(title)")
+
+        if title == "我的收藏" {
+            let poemListView = PoemListView(title: title, mode: .favorites)
+            let hostingController = UIHostingController(rootView: poemListView)
+            hostingController.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(hostingController, animated: true)
+        } else {
+            showUnavailableAlert(for: title)
+        }
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -188,7 +203,8 @@ class ProfileMenuCell: UITableViewCell {
     }
 
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupUI()
     }
 
     private func setupUI() {

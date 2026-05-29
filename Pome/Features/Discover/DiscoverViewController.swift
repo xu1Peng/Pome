@@ -10,21 +10,7 @@ class DiscoverViewController: UIViewController {
         
         // 设置导航栏
         navigationItem.title = "发现"
-        
-        // 左侧按钮
-        let searchButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), 
-                                         style: .plain,
-                                         target: self,
-                                         action: #selector(searchPoems))
-        navigationItem.leftBarButtonItem = searchButton
-        
-        // 右侧按钮
-        let refreshButton = UIBarButtonItem(image: UIImage(systemName: "arrow.triangle.2.circlepath"),
-                                      style: .plain,
-                                      target: self,
-                                      action: #selector(refreshPoem))
-        navigationItem.rightBarButtonItem = refreshButton
-        
+
         // 嵌入 SwiftUI 视图
         embedPoemHomeView()
     }
@@ -53,14 +39,4 @@ class DiscoverViewController: UIViewController {
         hostingController.didMove(toParent: self)
     }
     
-    @objc private func searchPoems() {
-        // 通过 NotificationCenter 通知 SwiftUI 视图显示搜索界面
-        NotificationCenter.default.post(name: NSNotification.Name("ShowPoemSearch"), object: nil)
-    }
-    
-    @objc private func refreshPoem() {
-        // 通过 NotificationCenter 通知 SwiftUI 视图刷新诗词
-        NotificationCenter.default.post(name: NSNotification.Name("RefreshPoem"), object: nil)
-    }
 }
-

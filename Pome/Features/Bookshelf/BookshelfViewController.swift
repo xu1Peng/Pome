@@ -37,13 +37,13 @@ class BookshelfViewController: UIViewController {
     }()
     
     // MARK: - Properties
-    private let bookshelfItems = [
-        ("我的收藏", "heart.fill", "已收藏 12 首诗词"),
-        ("阅读历史", "clock.fill", "最近阅读 5 首"),
-        ("标签管理", "tag.fill", "管理你的标签"),
-        ("下载管理", "arrow.down.circle.fill", "已下载 8 首"),
-        ("离线阅读", "wifi.slash", "支持离线阅读")
-    ]
+    private var bookshelfItems: [BookshelfItem] {
+        let favoriteCount = FavoritePoemStore.shared.favoritePoems(from: PoemService.shared.poems).count
+        return [
+            BookshelfItem(title: "我的收藏", icon: "heart.fill", subtitle: "已收藏 \(favoriteCount) 首诗词", mode: .favorites),
+            BookshelfItem(title: "全部诗词", icon: "books.vertical.fill", subtitle: "共 \(PoemService.shared.poems.count) 首可读", mode: .all)
+        ]
+    }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -51,6 +51,11 @@ class BookshelfViewController: UIViewController {
         
         navigationItem.title = "收藏"
         setupUI()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
     }
     
     // MARK: - UI Setup
@@ -107,7 +112,7 @@ class BookshelfViewController: UIViewController {
             tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             tableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20),
-            tableView.heightAnchor.constraint(equalToConstant: CGFloat(bookshelfItems.count * 70))
+            tableView.heightAnchor.constraint(equalToConstant: 140)
         ])
     }
 }
@@ -120,16 +125,16 @@ extension BookshelfViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! BookshelfCell
-        let (title, icon, subtitle) = bookshelfItems[indexPath.row]
-        cell.configure(title: title, icon: icon, subtitle: subtitle)
+        let item = bookshelfItems[indexPath.row]
+        cell.configure(title: item.title, icon: item.icon, subtitle: item.subtitle)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let (title, _, _) = bookshelfItems[indexPath.row]
+        let item = bookshelfItems[indexPath.row]
         
-        let poemListView = PoemListView(title: title)
+        let poemListView = PoemListView(title: item.title, mode: item.mode)
         let hostingController = UIHostingController(rootView: poemListView)
         hostingController.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(hostingController, animated: true)
@@ -138,6 +143,13 @@ extension BookshelfViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 70
     }
+}
+
+private struct BookshelfItem {
+    let title: String
+    let icon: String
+    let subtitle: String
+    let mode: PoemListView.Mode
 }
 
 // MARK: - BookshelfCell
@@ -154,7 +166,8 @@ class BookshelfCell: UITableViewCell {
     }
     
     required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: coder)
+        setupUI()
     }
     
     private func setupUI() {
@@ -221,4 +234,3 @@ class BookshelfCell: UITableViewCell {
         subtitleLabel.text = subtitle
     }
 }
-

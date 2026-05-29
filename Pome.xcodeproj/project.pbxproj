@@ -17,7 +17,15 @@
 		A8D484EE2E17AC3000AA5A8D /* PoemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D484ED2E17AC3000AA5A8D /* PoemView.swift */; };
 		A8D484EF2E17AC3000AA5A8D /* PoemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D484EC2E17AC3000AA5A8D /* PoemService.swift */; };
 		A8D484F02E17AC3000AA5A8D /* Poem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D484EA2E17AC3000AA5A8D /* Poem.swift */; };
+		A8D485002E17AC3000AA5A8D /* PoemResourceLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D484FE2E17AC3000AA5A8D /* PoemResourceLoader.swift */; };
+		A8D485012E17AC3000AA5A8D /* FavoritePoemStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D484FF2E17AC3000AA5A8D /* FavoritePoemStore.swift */; };
 		A8D484F12E17AC3000AA5A8D /* PoemHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D484EB2E17AC3000AA5A8D /* PoemHomeView.swift */; };
+		A8D484F62E17AC3300AA5A8D /* LearningModuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D484F72E17AC3300AA5A8D /* LearningModuleView.swift */; };
+		A8D4850D2E17AC4000AA5A8D /* tangshi300.json in Resources */ = {isa = PBXBuildFile; fileRef = A8D485082E17AC4000AA5A8D /* tangshi300.json */; };
+		A8D4850E2E17AC4000AA5A8D /* songci300.json in Resources */ = {isa = PBXBuildFile; fileRef = A8D485092E17AC4000AA5A8D /* songci300.json */; };
+		A8D4850F2E17AC4000AA5A8D /* shijing.json in Resources */ = {isa = PBXBuildFile; fileRef = A8D4850A2E17AC4000AA5A8D /* shijing.json */; };
+		A8D485102E17AC4000AA5A8D /* chuci.json in Resources */ = {isa = PBXBuildFile; fileRef = A8D4850B2E17AC4000AA5A8D /* chuci.json */; };
+		A8D485112E17AC4000AA5A8D /* maozedong.json in Resources */ = {isa = PBXBuildFile; fileRef = A8D4850C2E17AC4000AA5A8D /* maozedong.json */; };
 		3D6C3B33EB4842E6B1D14279 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA46C7C2499F485482AE119F /* Theme.swift */; };
 		F1A605ED025A43BF9D3BEEF9 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73235389B46446D4A07470D0 /* HomeView.swift */; };
 		A8D484F22E17AC3100AA5A8D /* PoemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8D484F32E17AC3100AA5A8D /* PoemDetailView.swift */; };
@@ -26,10 +34,7 @@
 		A1B2C3D4E5F6G7H8I9J0K1L2 /* BookshelfViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6G7H8I9J0K1L2M3 /* BookshelfViewController.swift */; };
 		A8E3FF222CE342B700D99766 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3FF212CE342B700D99766 /* AppDelegate.swift */; };
 		A8E3FF242CE342B700D99766 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3FF232CE342B700D99766 /* SceneDelegate.swift */; };
-		A8E3FF292CE342B700D99766 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = A8E3FF282CE342B700D99766 /* Base */; };
-		A8E3FF2C2CE342B700D99766 /* Pome.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A8E3FF2A2CE342B700D99766 /* Pome.xcdatamodeld */; };
 		A8E3FF2E2CE342B900D99766 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8E3FF2D2CE342B900D99766 /* Assets.xcassets */; };
-		A8E3FF312CE342B900D99766 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = A8E3FF302CE342B900D99766 /* Base */; };
 		A8E3FF3C2CE342B900D99766 /* PomeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3FF3B2CE342B900D99766 /* PomeTests.swift */; };
 		A8E3FF462CE342B900D99766 /* PomeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3FF452CE342B900D99766 /* PomeUITests.swift */; };
 		A8E3FF482CE342B900D99766 /* PomeUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E3FF472CE342B900D99766 /* PomeUITestsLaunchTests.swift */; };
@@ -62,8 +67,16 @@
 		A8D484EB2E17AC3000AA5A8D /* PoemHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoemHomeView.swift; sourceTree = "<group>"; };
 		A8D484EC2E17AC3000AA5A8D /* PoemService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoemService.swift; sourceTree = "<group>"; };
 		A8D484ED2E17AC3000AA5A8D /* PoemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoemView.swift; sourceTree = "<group>"; };
+		A8D484FE2E17AC3000AA5A8D /* PoemResourceLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoemResourceLoader.swift; sourceTree = "<group>"; };
+		A8D484FF2E17AC3000AA5A8D /* FavoritePoemStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritePoemStore.swift; sourceTree = "<group>"; };
 		A8D484F32E17AC3100AA5A8D /* PoemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoemDetailView.swift; sourceTree = "<group>"; };
 		A8D484F42E17AC3200AA5A8D /* PoemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoemListView.swift; sourceTree = "<group>"; };
+		A8D484F72E17AC3300AA5A8D /* LearningModuleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningModuleView.swift; sourceTree = "<group>"; };
+		A8D485082E17AC4000AA5A8D /* tangshi300.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = tangshi300.json; sourceTree = "<group>"; };
+		A8D485092E17AC4000AA5A8D /* songci300.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = songci300.json; sourceTree = "<group>"; };
+		A8D4850A2E17AC4000AA5A8D /* shijing.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = shijing.json; sourceTree = "<group>"; };
+		A8D4850B2E17AC4000AA5A8D /* chuci.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = chuci.json; sourceTree = "<group>"; };
+		A8D4850C2E17AC4000AA5A8D /* maozedong.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = maozedong.json; sourceTree = "<group>"; };
 		FA46C7C2499F485482AE119F /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		73235389B46446D4A07470D0 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		2198CAB0D4084AD2834FA625 /* DiscoverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewController.swift; sourceTree = "<group>"; };
@@ -71,10 +84,7 @@
 		A8E3FF1E2CE342B700D99766 /* Pome.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pome.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8E3FF212CE342B700D99766 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A8E3FF232CE342B700D99766 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		A8E3FF282CE342B700D99766 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		A8E3FF2B2CE342B700D99766 /* Pome.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Pome.xcdatamodel; sourceTree = "<group>"; };
 		A8E3FF2D2CE342B900D99766 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		A8E3FF302CE342B900D99766 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A8E3FF322CE342B900D99766 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A8E3FF372CE342B900D99766 /* PomeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PomeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8E3FF3B2CE342B900D99766 /* PomeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PomeTests.swift; sourceTree = "<group>"; };
@@ -143,11 +153,9 @@
 				A8E3FF552CE342C100D99766 /* Features */,
 				A8E3FF562CE342C200D99766 /* Shared */,
 				A87830B32D099EA500C6EA28 /* Extensions */,
-				A8E3FF272CE342B700D99766 /* Main.storyboard */,
+				A8D485072E17AC4000AA5A8D /* Resources */,
 				A8E3FF2D2CE342B900D99766 /* Assets.xcassets */,
-				A8E3FF2F2CE342B900D99766 /* LaunchScreen.storyboard */,
 				A8E3FF322CE342B900D99766 /* Info.plist */,
-				A8E3FF2A2CE342B700D99766 /* Pome.xcdatamodeld */,
 			);
 			path = Pome;
 			sourceTree = "<group>";
@@ -187,6 +195,7 @@
 			children = (
 				2198CAB0D4084AD2834FA625 /* DiscoverViewController.swift */,
 				A8D484EB2E17AC3000AA5A8D /* PoemHomeView.swift */,
+				A8D484F72E17AC3300AA5A8D /* LearningModuleView.swift */,
 			);
 			path = Discover;
 			sourceTree = "<group>";
@@ -213,11 +222,25 @@
 			children = (
 				A8D484EA2E17AC3000AA5A8D /* Poem.swift */,
 				A8D484EC2E17AC3000AA5A8D /* PoemService.swift */,
+				A8D484FE2E17AC3000AA5A8D /* PoemResourceLoader.swift */,
+				A8D484FF2E17AC3000AA5A8D /* FavoritePoemStore.swift */,
 				A8D484ED2E17AC3000AA5A8D /* PoemView.swift */,
 				A8D484F32E17AC3100AA5A8D /* PoemDetailView.swift */,
 				FA46C7C2499F485482AE119F /* Theme.swift */,
 			);
 			path = Shared;
+			sourceTree = "<group>";
+		};
+		A8D485072E17AC4000AA5A8D /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A8D485082E17AC4000AA5A8D /* tangshi300.json */,
+				A8D485092E17AC4000AA5A8D /* songci300.json */,
+				A8D4850A2E17AC4000AA5A8D /* shijing.json */,
+				A8D4850B2E17AC4000AA5A8D /* chuci.json */,
+				A8D4850C2E17AC4000AA5A8D /* maozedong.json */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		A8E3FF3A2CE342B900D99766 /* PomeTests */ = {
@@ -341,9 +364,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A8D4850D2E17AC4000AA5A8D /* tangshi300.json in Resources */,
+				A8D4850E2E17AC4000AA5A8D /* songci300.json in Resources */,
+				A8D4850F2E17AC4000AA5A8D /* shijing.json in Resources */,
+				A8D485102E17AC4000AA5A8D /* chuci.json in Resources */,
+				A8D485112E17AC4000AA5A8D /* maozedong.json in Resources */,
 				A8E3FF2E2CE342B900D99766 /* Assets.xcassets in Resources */,
-				A8E3FF312CE342B900D99766 /* Base in Resources */,
-				A8E3FF292CE342B700D99766 /* Base in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -373,15 +399,16 @@
 				A87830B12D0993ED00C6EA28 /* TabBarController.swift in Sources */,
 				A8E3FF222CE342B700D99766 /* AppDelegate.swift in Sources */,
 				A87830AE2D0993ED00C6EA28 /* PoemViewController.swift in Sources */,
-
-				A8E3FF2C2CE342B700D99766 /* Pome.xcdatamodeld in Sources */,
 				A8E3FF242CE342B700D99766 /* SceneDelegate.swift in Sources */,
 
 
 				A8D484EE2E17AC3000AA5A8D /* PoemView.swift in Sources */,
 				A8D484EF2E17AC3000AA5A8D /* PoemService.swift in Sources */,
 				A8D484F02E17AC3000AA5A8D /* Poem.swift in Sources */,
+				A8D485002E17AC3000AA5A8D /* PoemResourceLoader.swift in Sources */,
+				A8D485012E17AC3000AA5A8D /* FavoritePoemStore.swift in Sources */,
 				A8D484F12E17AC3000AA5A8D /* PoemHomeView.swift in Sources */,
+				A8D484F62E17AC3300AA5A8D /* LearningModuleView.swift in Sources */,
 				3D6C3B33EB4842E6B1D14279 /* Theme.swift in Sources */,
 				F1A605ED025A43BF9D3BEEF9 /* HomeView.swift in Sources */,
 				A8D484F22E17AC3100AA5A8D /* PoemDetailView.swift in Sources */,
@@ -422,25 +449,6 @@
 			targetProxy = A8E3FF422CE342B900D99766 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		A8E3FF272CE342B700D99766 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A8E3FF282CE342B700D99766 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		A8E3FF2F2CE342B900D99766 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A8E3FF302CE342B900D99766 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		A8E3FF492CE342B900D99766 /* Debug */ = {
@@ -572,8 +580,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Pome/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -599,8 +605,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Pome/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -729,18 +733,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCVersionGroup section */
-		A8E3FF2A2CE342B700D99766 /* Pome.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				A8E3FF2B2CE342B700D99766 /* Pome.xcdatamodel */,
-			);
-			currentVersion = A8E3FF2B2CE342B700D99766 /* Pome.xcdatamodel */;
-			path = Pome.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = A8E3FF162CE342B700D99766 /* Project object */;
 }

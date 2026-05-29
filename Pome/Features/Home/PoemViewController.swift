@@ -4,12 +4,19 @@ import SwiftUI
 class PoemViewController: UIViewController {
 
     private var homeView: UIHostingController<HomeView>?
+    private let poemService = PoemService.shared
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // 设置导航栏
         navigationItem.title = "首页"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "magnifyingglass"),
+            style: .plain,
+            target: self,
+            action: #selector(showSearch)
+        )
 
         // 设置导航控制器代理
         navigationController?.delegate = self
@@ -20,7 +27,9 @@ class PoemViewController: UIViewController {
 
     private func embedHomeView() {
         // 创建 SwiftUI 视图
-        let homeView = HomeView()
+        let homeView = HomeView { [weak self] poem in
+            self?.showPoemDetail(poem)
+        }
         let hostingController = UIHostingController(rootView: homeView)
 
         // 保存引用
@@ -40,6 +49,26 @@ class PoemViewController: UIViewController {
         ])
 
         hostingController.didMove(toParent: self)
+    }
+
+    @objc private func showSearch() {
+        let searchView = SearchView(poemService: poemService) { [weak self] poem in
+            self?.dismiss(animated: true) {
+                self?.showPoemDetail(poem)
+            }
+        }
+
+        let hostingController = UIHostingController(rootView: searchView)
+        hostingController.modalPresentationStyle = .pageSheet
+        present(hostingController, animated: true)
+    }
+
+    private func showPoemDetail(_ poem: Poem) {
+        let detailView = PoemDetailView(poem: poem)
+        let hostingController = UIHostingController(rootView: detailView)
+        hostingController.title = poem.title
+        hostingController.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(hostingController, animated: true)
     }
 }
 
